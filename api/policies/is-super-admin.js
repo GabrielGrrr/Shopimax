@@ -1,28 +1,26 @@
 /**
  * is-super-admin
  *
- * A simple policy that blocks requests from non-super-admins.
+ * Une simple règle d'utilisation qui bloque les règle ne provenant pas d'un super-admin
  *
- * For more about how to use policies, see:
+ * Pour en savoir plus sur les règles d'utilisation / policies, voir :
  *   https://sailsjs.com/config/policies
  *   https://sailsjs.com/docs/concepts/policies
  *   https://sailsjs.com/docs/concepts/policies/access-control-and-permissions
  */
-module.exports = async function (req, res, proceed) {
-
-  // First, check whether the request comes from a logged-in user.
-  // > For more about where `req.me` comes from, check out this app's
-  // > custom hook (`api/hooks/custom/index.js`).
+module.exports = async function(req, res, proceed) {
+  // D'abord, on vérifie sir la requête provient d'un user connecté
+  // > Pour en savoir plus sur `req.me` aller voir l'hook custom de ce site
+  // > (`api/hooks/custom/index.js`).
   if (!req.me) {
     return res.unauthorized();
-  }//•
+  } //•
 
-  // Then check that this user is a "super admin".
+  // Puis, on vérifie que le statut corresponde à un SU
   if (!req.me.isSuperAdmin) {
     return res.forbidden();
-  }//•
+  } //•
 
-  // IWMIH, we've got ourselves a "super admin".
+  //On a bien un SU
   return proceed();
-
 };
