@@ -38,20 +38,16 @@ module.exports = {
     badCombo: {
       description: `Le couple email / password ne correspond à aucun utilisateur dans la BDD.`,
       responseType: "unauthorized"
-      // ^This uses the custom `unauthorized` response located in `api/responses/unauthorized.js`.
-      // To customize the generic "unauthorized" response across this entire app, change that file
-      // (see api/responses/unauthorized).
-      //
-      // To customize the response for _only this_ action, replace `responseType` with
-      // something else.  For example, you might set `statusCode: 498` and change the
-      // implementation below accordingly (see http://sailsjs.com/docs/concepts/controllers).
+      // On utilise ici la réponse "unauthorized" customisée dans `api/responses/unauthorized.js`.
+      // Pour customiser cette réponse pour seulement cette action, remplacer `responseType` avec
+      // autre chose.  Par exemple, vous pourriez définir `statusCode: 498` et changer
+      // l'implémentation ci-dessous en fonction (voir http://sailsjs.com/docs/concepts/controllers).
     }
   },
 
   fn: async function(inputs, exits) {
-    // Look up by the email address.
-    // (note that we lowercase it to ensure the lookup is always case-insensitive,
-    // regardless of which database we're using)
+    // On trouve l'user par son mail. (on s'assure que l'adresse
+    //soit toujours insensible, quel que soit le SGBD à la casse avec le toLowerCase call)
     var userRecord = await User.findOne({
       emailAddress: inputs.emailAddress.toLowerCase()
     });
@@ -66,11 +62,11 @@ module.exports = {
       .checkPassword(inputs.password, userRecord.password)
       .intercept("incorrect", "badCombo");
 
-    // If "Remember Me" was enabled, then keep the session alive for
-    // a longer amount of time.  (This causes an updated "Set Cookie"
-    // response header to be sent as the result of this request -- thus
-    // we must be dealing with a traditional HTTP request in order for
-    // this to work.)
+    // Si "Remember me" a été coché, prolonger la session user
+    // (Cela produit une mise à jour d'header de requête "Set Cookie"
+    // qui sera envoyée comme résultat à cette requête -- ainsi,
+    // il nous faut avoir affaire à une requête HTTP traditionnelle pour que
+    // cela puisse fonctionner.)
     if (inputs.rememberMe) {
       if (this.req.isSocket) {
         sails.log.warn(
@@ -84,10 +80,10 @@ module.exports = {
       }
     }
 
-    // Modify the active session instance.
+    // Modifie l'instance de session active.
     this.req.session.userId = userRecord.id;
 
-    // Send success response (this is where the session actually gets persisted)
+    // Envoie la réponse success (la session est ici véritablement persistée)
     return exits.success();
   }
 };

@@ -1,69 +1,59 @@
 module.exports = {
+  friendlyName: "Envoie un formulaire de contact",
 
-
-  friendlyName: 'Deliver contact form message',
-
-
-  description: 'Deliver a contact form message to the appropriate internal channel(s).',
-
+  description:
+    "Envoie un formulaire de contact aux canaux internes appropriés.",
 
   inputs: {
-
     emailAddress: {
       required: true,
-      type: 'string',
-      description: 'A return email address where we can respond.',
-      example: 'hermione@hogwarts.edu'
+      type: "string",
+      description: "Une adresse mail retour à laquelle on peut répondre.",
+      example: "pamela@harvard.edu"
     },
 
     topic: {
       required: true,
-      type: 'string',
-      description: 'The topic from the contact form.',
-      example: 'I want to buy stuff.'
+      type: "string",
+      description: "Le sujet du formulaire de contact.",
+      example: "I want to buy stuff."
     },
 
     fullName: {
       required: true,
-      type: 'string',
-      description: 'The full name of the human sending this message.',
-      example: 'Hermione Granger'
+      type: "string",
+      description: "Le nom complet de la personne envoyant ce formulaire.",
+      example: "Pamela Pop"
     },
 
     message: {
       required: true,
-      type: 'string',
-      description: 'The custom message, in plain text.'
+      type: "string",
+      description: "Le message, plain text."
     }
-
   },
-
 
   exits: {
-
     success: {
-      description: 'The message was sent successfully.'
+      description: "Le message a été envoyé avec succès."
     }
-
   },
 
-
   fn: async function(inputs, exits) {
-
     if (!sails.config.custom.internalEmailAddress) {
       throw new Error(
-`Cannot deliver incoming message from contact form because there is no internal
-email address (\`sails.config.custom.internalEmailAddress\`) configured for this
-app.  To enable contact form emails, you'll need to add this missing setting to
-your custom config -- usually in \`config/custom.js\`, \`config/staging.js\`,
-\`config/production.js\`, or via system environment variables.`
+        `Impossible de recevoir le message provenant du formulaire car aucune adresse interne
+        (\`sails.config.custom.internalEmailAddress\`) n'a été définie.  
+        Pour permettre les mails depuis le formulaire de contact, vous devez autoriser cette option
+         -- généralement dans \`config/custom.js\`, \`config/staging.js\`,
+\`config/production.js\`, ou via les variables d'environnement système.`
       );
     }
 
     await sails.helpers.sendTemplateEmail.with({
       to: sails.config.custom.internalEmailAddress,
-      subject: 'New contact form message',
-      template: 'internal/email-contact-form',
+      subject: "Nouveau message par formulaire de contact",
+      template: "internal/email-contact-form",
       layout: false,
       templateData: {
         contactName: inputs.fullName,
@@ -74,8 +64,5 @@ your custom config -- usually in \`config/custom.js\`, \`config/staging.js\`,
     });
 
     return exits.success();
-
   }
-
-
 };

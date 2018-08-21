@@ -1,77 +1,67 @@
 module.exports = {
+  friendlyName: "Confirm email",
 
-
-  friendlyName: 'Confirm email',
-
-
-  description:
-`Confirm a new user's email address, or an existing user's request for an email address change,
-then redirect to either a special landing page (for newly-signed up users), or the account page
-(for existing users who just changed their email address).`,
-
+  description: `Confirme l'email d'un nouvel user, ou d'un user existant demandant un changement d'email,
+puis les redirige sur une page output spécialement définir (pour les nouveaux arrivant)
+ou sur la page de leur compte (pour ceux qui ont demandé un changement d'adresse).`,
 
   inputs: {
-
     token: {
-      description: 'The confirmation token from the email.',
-      example: '4-32fad81jdaf$329'
+      description: "Le token de confirmation de l'email.",
+      example: "4-32fad81jdaf$329"
     }
-
   },
 
-
   exits: {
-
     success: {
-      description: 'Email address confirmed and requesting user logged in.'
+      description: "Adresse email confirmée."
     },
 
     redirect: {
-      description: 'Email address confirmed and requesting user logged in.  Since this looks like a browser, redirecting...',
-      responseType: 'redirect'
+      description:
+        "Adresse email confirmée.  Puisque cela ressemble à un navigateur, on redirige...",
+      responseType: "redirect"
     },
 
     invalidOrExpiredToken: {
-      responseType: 'expired',
-      description: 'The provided token is expired, invalid, or already used up.',
+      responseType: "expired",
+      description: "Le token fournit est invalide, expiré, ou déjà utilisé."
     },
 
     emailAddressNoLongerAvailable: {
       statusCode: 409,
-      viewTemplatePath: '500',
-      description: 'The email address is no longer available.',
-      extendedDescription: 'This is an edge case that is not always anticipated by websites and APIs.  Since it is pretty rare, the 500 server error page is used as a simple catch-all.  If this becomes important in the future, this could easily be expanded into a custom error page or resolution flow.  But for context: this behavior of showing the 500 server error page mimics how popular apps like Slack behave under the same circumstances.',
+      viewTemplatePath: "500",
+      description: "L'adresse email n'est plus valable.",
+      extendedDescription:
+        "C'est un cas limite qui n'est pas toujours anticipé par les sites et api web. bla bla bla Since it is pretty rare, the 500 server error page is used as a simple catch-all.  If this becomes important in the future, this could easily be expanded into a custom error page or resolution flow.  But for context: this behavior of showing the 500 server error page mimics how popular apps like Slack behave under the same circumstances."
     }
-
   },
 
-
-  fn: async function (inputs, exits) {
-
-    // If no token was provided, this is automatically invalid.
+  fn: async function(inputs, exits) {
+    // Si aucun token n'est fourni, automatiquement invalide
     if (!inputs.token) {
-      throw 'invalidOrExpiredToken';
+      throw "invalidOrExpiredToken";
     }
 
-    // Get the user with the matching email token.
+    // On obtient l'utilisateur correspondant au token
     var user = await User.findOne({ emailProofToken: inputs.token });
 
-    // If no such user exists, or their token is expired, bail.
+    // Si il n'existe pas, invalide.
     if (!user || user.emailProofTokenExpiresAt <= Date.now()) {
-      throw 'invalidOrExpiredToken';
+      throw "invalidOrExpiredToken";
     }
 
-    if (user.emailStatus === 'unconfirmed') {
+    if (user.emailStatus === "unconfirmed") {
       //  ┌─┐┌─┐┌┐┌┌─┐┬┬─┐┌┬┐┬┌┐┌┌─┐  ╔═╗╦╦═╗╔═╗╔╦╗ ╔╦╗╦╔╦╗╔═╗  ╦ ╦╔═╗╔═╗╦═╗  ┌─┐┌┬┐┌─┐┬┬
       //  │  │ ││││├┤ │├┬┘││││││││ ┬  ╠╣ ║╠╦╝╚═╗ ║───║ ║║║║║╣   ║ ║╚═╗║╣ ╠╦╝  ├┤ │││├─┤││
       //  └─┘└─┘┘└┘└  ┴┴└─┴ ┴┴┘└┘└─┘  ╚  ╩╩╚═╚═╝ ╩   ╩ ╩╩ ╩╚═╝  ╚═╝╚═╝╚═╝╩╚═  └─┘┴ ┴┴ ┴┴┴─┘
-      // If this is a new user confirming their email for the first time,
-      // then just update the state of their user record in the database,
-      // store their user id in the session (just in case they aren't logged
-      // in already), and then redirect them to the "email confirmed" page.
+      // Si c'est un user confirmant son mail pour la première fois
+      // alors, on met simplement à jour son entrée dans la BDD,
+      // on enregistre son id dans la session (s'il n'est pas déjà connecté)
+      // et on le redirige sur la page d' "email confirmé".
       await User.update({ id: user.id }).set({
-        emailStatus: 'confirmed',
-        emailProofToken: '',
+        emailStatus: "confirmed",
+        emailProofToken: "",
         emailProofTokenExpiresAt: 0
       });
       this.req.session.userId = user.id;
@@ -79,68 +69,69 @@ then redirect to either a special landing page (for newly-signed up users), or t
       if (this.req.wantsJSON) {
         return exits.success();
       } else {
-        throw { redirect: '/email/confirmed' };
+        throw { redirect: "/email/confirmed" };
       }
-
-    } else if (user.emailStatus === 'changeRequested') {
+    } else if (user.emailStatus === "changeRequested") {
       //  ┌─┐┌─┐┌┐┌┌─┐┬┬─┐┌┬┐┬┌┐┌┌─┐  ╔═╗╦ ╦╔═╗╔╗╔╔═╗╔═╗╔╦╗  ┌─┐┌┬┐┌─┐┬┬
       //  │  │ ││││├┤ │├┬┘││││││││ ┬  ║  ╠═╣╠═╣║║║║ ╦║╣  ║║  ├┤ │││├─┤││
       //  └─┘└─┘┘└┘└  ┴┴└─┴ ┴┴┘└┘└─┘  ╚═╝╩ ╩╩ ╩╝╚╝╚═╝╚═╝═╩╝  └─┘┴ ┴┴ ┴┴┴─┘
-      if (!user.emailChangeCandidate){
-        throw new Error(`Consistency violation: Could not update Stripe customer because this user record's emailChangeCandidate ("${user.emailChangeCandidate}") is missing.  (This should never happen.)`);
+      if (!user.emailChangeCandidate) {
+        throw new Error(
+          `Consistency violation: Could not update Stripe customer because this user record's emailChangeCandidate ("${
+            user.emailChangeCandidate
+          }") is missing.  (This should never happen.)`
+        );
       }
 
-      // Last line of defense: since email change candidates are not protected
-      // by a uniqueness constraint in the database, it's important that we make
-      // sure no one else managed to grab this email in the mean time since we
-      // last checked its availability. (This is a relatively rare edge case--
-      // see exit description.)
-      if (await User.count({ emailAddress: user.emailChangeCandidate }) > 0) {
-        throw 'emailAddressNoLongerAvailable';
+      // Ici, on vérifie que personne n'a demandé l'email concerné depuis la dernière vérification
+      // que l'on a faite (ce qui, comme la clé en BDD n'est pas unique, peut arriver, voir cas limite plus haut)
+      if ((await User.count({ emailAddress: user.emailChangeCandidate })) > 0) {
+        throw "emailAddressNoLongerAvailable";
       }
 
-      // If billing features are enabled, also update the billing email for this
-      // user's linked customer entry in the Stripe API to make sure they receive
-      // email receipts.
-      // > Note: If there was not already a Stripe customer entry for this user,
-      // > then one will be set up implicitly, so we'll need to persist it to our
-      // > database.  (This could happen if Stripe credentials were not configured
-      // > at the time this user was originally created.)
-      if(sails.config.custom.enableBillingFeatures) {
-        let didNotAlreadyHaveCustomerId = (! user.stripeCustomerId);
+      // Si les fonctionnalités de paiement sont activées, met également à jour le mail de paiement
+      // de l'entrée client liée à cet user dans Stripe pour s'assurer qu'il reçoive les reçus (ah ah)
+      // par mail.
+      // > Note: Si aucune entrée Stripe n'existait pour cet user, on en crée une implicitement.
+      // > Il faudra donc la persister. (Cela peut arriver si les certificats Stripe n'étaient pas définis
+      // > quand cet user a été créé.)
+      if (sails.config.custom.enableBillingFeatures) {
+        let didNotAlreadyHaveCustomerId = !user.stripeCustomerId;
         let stripeCustomerId = await sails.helpers.stripe.saveBillingInfo.with({
           stripeCustomerId: user.stripeCustomerId,
           emailAddress: user.emailChangeCandidate
         });
-        if (didNotAlreadyHaveCustomerId){
+        if (didNotAlreadyHaveCustomerId) {
           await User.update({ id: user.id }).set({
             stripeCustomerId
           });
         }
       }
 
-      // Finally update the user in the database, store their id in the session
-      // (just in case they aren't logged in already), then redirect them to
-      // their "my account" page so they can see their updated email address.
+      // Finalement, met à jour l'user dans la BDD, enregistre son id en session
+      // (au cas où ils ne soient déjà connectés), puis les redirige vers la page
+      // "mon compte" pour qu'ils puissent voir leur adresse mail bien mise à jour.
       await User.update({ id: user.id }).set({
-        emailStatus: 'confirmed',
-        emailProofToken: '',
+        emailStatus: "confirmed",
+        emailProofToken: "",
         emailProofTokenExpiresAt: 0,
         emailAddress: user.emailChangeCandidate,
-        emailChangeCandidate: '',
+        emailChangeCandidate: ""
       });
       this.req.session.userId = user.id;
       if (this.req.wantsJSON) {
         return exits.success();
       } else {
-        throw { redirect: '/account' };
+        throw { redirect: "/account" };
       }
-
     } else {
-      throw new Error(`Consistency violation: User ${user.id} has an email proof token, but somehow also has an emailStatus of "${user.emailStatus}"!  (This should never happen.)`);
+      throw new Error(
+        `Erreur de consistence entre les données : l'User ${
+          user.id
+        } a un token emailProof, mais a tout de même un emailStatus de "${
+          user.emailStatus
+        }"!  (Cela ne devrait pas arriver.)`
+      );
     }
-
   }
-
-
 };

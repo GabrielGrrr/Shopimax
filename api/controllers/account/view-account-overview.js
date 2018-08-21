@@ -1,30 +1,21 @@
 module.exports = {
+  friendlyName: "View account overview",
 
-
-  friendlyName: 'View account overview',
-
-
-  description: 'Display "Account Overview" page.',
-
+  description: "Affiche l page / tableau de bord profil",
 
   exits: {
-
     success: {
-      viewTemplatePath: 'pages/account/account-overview',
+      viewTemplatePath: "pages/account/account-overview"
     }
-
   },
 
-
-  fn: async function (inputs, exits) {
-
-    // If billing features are enabled, include our configured Stripe.js
-    // public key in the view locals.  Otherwise, leave it as undefined.
+  fn: async function(inputs, exits) {
+    // Si la fonctionnalité de paiement a été activée, inclut la clé de
+    // Stripe.js configurée dans sails.config.custom.stripePublishableKey.  Sinon, on la laisse à undefined.
     return exits.success({
-      stripePublishableKey: sails.config.custom.enableBillingFeatures? sails.config.custom.stripePublishableKey : undefined,
+      stripePublishableKey: sails.config.custom.enableBillingFeatures
+        ? sails.config.custom.stripePublishableKey
+        : undefined
     });
-
   }
-
-
 };

@@ -1,26 +1,15 @@
 module.exports = {
+  friendlyName: "View edit profile",
 
-
-  friendlyName: 'View edit profile',
-
-
-  description: 'Display "Edit profile" page.',
-
+  description: "Affiche la page d'édition du profil",
 
   exits: {
-
     success: {
-      viewTemplatePath: 'pages/account/edit-profile',
+      viewTemplatePath: "pages/account/edit-profile"
     }
-
   },
 
-
-  fn: async function (inputs, exits) {
-
+  fn: async function(inputs, exits) {
     return exits.success();
-
   }
-
-
 };

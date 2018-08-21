@@ -1,57 +1,45 @@
 module.exports = {
+  friendlyName: "View new password",
 
-
-  friendlyName: 'View new password',
-
-
-  description: 'Display "New password" page.',
-
+  description: "Affiche le formulaire de renouvellement de mot de passe.",
 
   inputs: {
-
     token: {
-      description: 'The password reset token from the email.',
-      example: '4-32fad81jdaf$329'
+      description: "Le jeton de renouvellement du mot de passe.",
+      example: "4-32fad81jdaf$329"
     }
-
   },
 
-
   exits: {
-
     success: {
-      viewTemplatePath: 'pages/entrance/new-password'
+      viewTemplatePath: "pages/entrance/new-password"
     },
 
     invalidOrExpiredToken: {
-      responseType: 'expired',
-      description: 'The provided token is expired, invalid, or has already been used.',
+      responseType: "expired",
+      description: "Le jeton fourni est expiré, invalide, ou déjà utilisé."
     }
-
   },
 
-
-  fn: async function (inputs, exits) {
-
-    // If password reset token is missing, display an error page explaining that the link is bad.
+  fn: async function(inputs, exits) {
+    // Si le token n'existe pas, on affiche une page d'erreur idoine
     if (!inputs.token) {
-      sails.log.warn('Attempting to view new password (recovery) page, but no reset password token included in request!  Displaying error page...');
-      throw 'invalidOrExpiredToken';
-    }//•
+      sails.log.warn(
+        "Tentative de consultation de la page de renouvellement du mot de passe, mais pas de jeton de renouvellement inclus dans la requête! Affichage de la page d'erreur..."
+      );
+      throw "invalidOrExpiredToken";
+    } //•
 
-    // Look up the user with this reset token.
+    // Trouve l'user correspondant au resetToken
     var userRecord = await User.findOne({ passwordResetToken: inputs.token });
-    // If no such user exists, or their token is expired, display an error page explaining that the link is bad.
+    // S'il n'y en a pas, on renvoie vers la page idoine
     if (!userRecord || userRecord.passwordResetTokenExpiresAt <= Date.now()) {
-      throw 'invalidOrExpiredToken';
+      throw "invalidOrExpiredToken";
     }
 
-    // Grab token and include it in view locals
+    // On récupère le jeton et on l'inclue dans la vue
     return exits.success({
       token: inputs.token
     });
-
   }
-
-
 };

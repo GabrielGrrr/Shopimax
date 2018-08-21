@@ -1,36 +1,26 @@
 module.exports = {
+  friendlyName: "View forgot password",
 
-
-  friendlyName: 'View forgot password',
-
-
-  description: 'Display "Forgot password" page.',
-
+  description: "Affiche la page de formulaire d'oubli de password.",
 
   exits: {
-
     success: {
-      viewTemplatePath: 'pages/entrance/forgot-password',
+      viewTemplatePath: "pages/entrance/forgot-password"
     },
 
     redirect: {
-      description: 'The requesting user is already logged in.',
-      extendedDescription: 'Logged-in users should change their password in "Account settings."',
-      responseType: 'redirect',
+      description: "L'utilisateur est déjà connecté.",
+      extendedDescription:
+        'Les utilisateurs connectés devraient changer leurs mots de passe dans "Mon Profil"',
+      responseType: "redirect"
     }
-
   },
 
-
-  fn: async function (inputs, exits) {
-
+  fn: async function(inputs, exits) {
     if (this.req.me) {
-      throw {redirect: '/'};
+      throw { redirect: "/" };
     }
 
     return exits.success();
-
   }
-
-
 };

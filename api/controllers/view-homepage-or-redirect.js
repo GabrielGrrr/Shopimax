@@ -1,37 +1,29 @@
 module.exports = {
+  friendlyName: "Voir la page d'accueil ou rediriger l'user",
 
-
-  friendlyName: 'View homepage or redirect',
-
-
-  description: 'Display or redirect to the appropriate homepage, depending on login status.',
-
+  description:
+    "Affiche, ou redirige jusqu'à la page d'accueil appropriéee en fonction du statut du login.",
 
   exits: {
-
     success: {
       statusCode: 200,
-      description: 'Requesting user is a guest, so show the public landing page.',
-      viewTemplatePath: 'pages/homepage'
+      description:
+        "L'utilisateur est un invité, on le renvoie donc vers la page d'accueil publique.",
+      viewTemplatePath: "pages/homepage"
     },
 
     redirect: {
-      responseType: 'redirect',
-      description: 'Requesting user is logged in, so redirect to the internal welcome page.'
-    },
-
+      responseType: "redirect",
+      description:
+        "L'utilisateur est connecté, on le renvoie donc vers la page d'accueil interne."
+    }
   },
 
-
-  fn: async function (inputs, exits) {
-
+  fn: async function(inputs, exits) {
     if (this.req.me) {
-      throw {redirect:'/welcome'};
+      throw { redirect: "/welcome" };
     }
 
     return exits.success();
-
   }
-
-
 };

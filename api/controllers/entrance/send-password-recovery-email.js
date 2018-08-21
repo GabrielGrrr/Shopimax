@@ -1,58 +1,51 @@
 module.exports = {
+  friendlyName: "Send password recovery email",
 
-
-  friendlyName: 'Send password recovery email',
-
-
-  description: 'Send a password recovery notification to the user with the specified email address.',
-
+  description:
+    "Envoie une notification de récupération de mot de passe avec l'adresse mail fournie.",
 
   inputs: {
-
     emailAddress: {
-      description: 'The email address of the alleged user who wants to recover their password.',
-      example: 'rydahl@example.com',
-      type: 'string',
+      description:
+        "L'adresse mail de l'user prétendu voulant récupérer son mot de passe.",
+      example: "rydahl@example.com",
+      type: "string",
       required: true
     }
-
   },
-
 
   exits: {
-
     success: {
-      description: 'The email address might have matched a user in the database.  (If so, a recovery email was sent.)'
-    },
-
+      description:
+        "L'adresse email peut avoir correspondu à un user dans la BDD.  (Si c'est le cas, un mail de récupération a été envoyé.)"
+    }
   },
 
-
-  fn: async function (inputs, exits) {
-
-    // Find the record for this user.
-    // (Even if no such user exists, pretend it worked to discourage sniffing.)
+  fn: async function(inputs, exits) {
+    // Trouve l'entrée correspondant à cet user
+    // (Même si l'user n'existe pas, prétendre que cela a fonctionné pour décourager du sniffing).
     var userRecord = await User.findOne({ emailAddress: inputs.emailAddress });
     if (!userRecord) {
       return exits.success();
-    }//•
+    } //•
 
-    // Come up with a pseudorandom, probabilistically-unique token for use
-    // in our password recovery email.
-    var token = await sails.helpers.strings.random('url-friendly');
+    // Trouver un token pseudo-rando et probablement unique pour l'utiliser
+    // dans notre mail de récup.
+    var token = await sails.helpers.strings.random("url-friendly");
 
-    // Store the token on the user record
-    // (This allows us to look up the user when the link from the email is clicked.)
+    // Enregistre le token dans l'entrée user
+    // (Ce qui permet de consulter l'user quand le token envoyé par mail est cliqué.)
     await User.update({ id: userRecord.id }).set({
       passwordResetToken: token,
-      passwordResetTokenExpiresAt: Date.now() + sails.config.custom.passwordResetTokenTTL,
+      passwordResetTokenExpiresAt:
+        Date.now() + sails.config.custom.passwordResetTokenTTL
     });
 
-    // Send recovery email
+    // Envoie le mail de récup.
     await sails.helpers.sendTemplateEmail.with({
       to: inputs.emailAddress,
-      subject: 'Password reset instructions',
-      template: 'email-reset-password',
+      subject: "Password reset instructions",
+      template: "email-reset-password",
       templateData: {
         fullName: userRecord.fullName,
         token: token
@@ -60,8 +53,5 @@ module.exports = {
     });
 
     return exits.success();
-
   }
-
-
 };

@@ -1,89 +1,89 @@
 module.exports = {
+  friendlyName: "Signup",
 
+  description: "Enregistre un nouveau compte utilisateur.",
 
-  friendlyName: 'Signup',
+  extendedDescription: `Cela crée une nouvelle entrée user dans la BDD, logge l'user envoyant la requête en modififant sa
+[session](https://sailsjs.com/documentation/concepts/sessions), 
+et envoie un mail de vérification (si mailgun a été activé).
 
-
-  description: 'Sign up for a new user account.',
-
-
-  extendedDescription:
-`This creates a new user record in the database, signs in the requesting user agent
-by modifying its [session](https://sailsjs.com/documentation/concepts/sessions), and
-(if emailing with Mailgun is enabled) sends an account verification email.
-
-If a verification email is sent, the new user's account is put in an "unconfirmed" state
-until they confirm they are using a legitimate email address (by clicking the link in
-the account verification message.)`,
-
+Si un mail de vérification est envoyé, le compte du nouvel user est mis dans un état
+"unconfirmed" jusqu'à ce qu'ils puissent confirmer l'utilisation d'une adresse mail légitime
+(en cliquant sur le lien dans le mail de vérification).`,
 
   inputs: {
-
     emailAddress: {
       required: true,
-      type: 'string',
+      type: "string",
       isEmail: true,
-      description: 'The email address for the new account, e.g. m@example.com.',
-      extendedDescription: 'Must be a valid email address.',
+      description:
+        "L'adresse e-mail pour le nouveau compte, ex: m@example.com.",
+      extendedDescription: "Doit être une adresse email valide."
     },
 
     password: {
       required: true,
-      type: 'string',
+      type: "string",
       maxLength: 200,
-      example: 'passwordlol',
-      description: 'The unencrypted password to use for the new account.'
+      example: "passwordlol",
+      description: "Le mot de passe encodé à utiliser pour le nouveau compte."
     },
 
-    fullName:  {
+    fullName: {
       required: true,
-      type: 'string',
-      example: 'Frida Kahlo de Rivera',
-      description: 'The user\'s full name.',
+      type: "string",
+      example: "Frida Kahlo de Rivera",
+      description: "Le nom d'utilisateur complet."
     }
-
   },
 
-
   exits: {
-
     invalid: {
-      responseType: 'badRequest',
-      description: 'The provided fullName, password and/or email address are invalid.',
-      extendedDescription: 'If this request was sent from a graphical user interface, the request '+
-      'parameters should have been validated/coerced _before_ they were sent.'
+      responseType: "badRequest",
+      description:
+        "Le nom d'utilisateur, password ou email fourni n'est pas valide.",
+      extendedDescription:
+        "Si cette requête a été envoyée par une GUI, les valeurs fournies en paramètre" +
+        "auraient dû être validées avant d'avoir été envoyées."
     },
 
     emailAlreadyInUse: {
       statusCode: 409,
-      description: 'The provided email address is already in use.',
-    },
-
+      description: "L'adresse email fournie est déjà utilisée."
+    }
   },
 
-
-  fn: async function (inputs, exits) {
-
+  fn: async function(inputs, exits) {
     var newEmailAddress = inputs.emailAddress.toLowerCase();
 
-    // Build up data for the new user record and save it to the database.
-    // (Also use `fetch` to retrieve the new ID so that we can use it below.)
-    var newUserRecord = await User.create(Object.assign({
-      emailAddress: newEmailAddress,
-      password: await sails.helpers.passwords.hashPassword(inputs.password),
-      fullName: inputs.fullName,
-      tosAcceptedByIp: this.req.ip
-    }, sails.config.custom.verifyEmailAddresses? {
-      emailProofToken: await sails.helpers.strings.random('url-friendly'),
-      emailProofTokenExpiresAt: Date.now() + sails.config.custom.emailProofTokenTTL,
-      emailStatus: 'unconfirmed'
-    }:{}))
-    .intercept('E_UNIQUE', 'emailAlreadyInUse')
-    .intercept({name: 'UsageError'}, 'invalid')
-    .fetch();
+    // Construit les données pour le nouvel utilisateur et les enregistre dans le SGBD
+    // (Aussi, utilise `fetch` pour récupérer le nouvel ID afin que l'on puisse l'utiliser ci-dessous.)
+    var newUserRecord = await User.create(
+      Object.assign(
+        {
+          emailAddress: newEmailAddress,
+          password: await sails.helpers.passwords.hashPassword(inputs.password),
+          fullName: inputs.fullName,
+          tosAcceptedByIp: this.req.ip
+        },
+        sails.config.custom.verifyEmailAddresses
+          ? {
+              emailProofToken: await sails.helpers.strings.random(
+                "url-friendly"
+              ),
+              emailProofTokenExpiresAt:
+                Date.now() + sails.config.custom.emailProofTokenTTL,
+              emailStatus: "unconfirmed"
+            }
+          : {}
+      )
+    )
+      .intercept("E_UNIQUE", "emailAlreadyInUse")
+      .intercept({ name: "UsageError" }, "invalid")
+      .fetch();
 
-    // If billing feaures are enabled, save a new customer entry in the Stripe API.
-    // Then persist the Stripe customer id in the database.
+    // Si les fonctionnalités de paiement sont activées, enregistre une nouvelle entrée client dans l'API Stripe.
+    // Puis persiste l'id client Stripe dans la SGBD.
     if (sails.config.custom.enableBillingFeatures) {
       let stripeCustomerId = await sails.helpers.stripe.saveBillingInfo.with({
         emailAddress: newEmailAddress
@@ -93,27 +93,27 @@ the account verification message.)`,
       });
     }
 
-    // Store the user's new id in their session.
+    // Enregistre l'id user dans sa session
     this.req.session.userId = newUserRecord.id;
 
     if (sails.config.custom.verifyEmailAddresses) {
-      // Send "confirm account" email
+      // Envoie le mail de confirmation
       await sails.helpers.sendTemplateEmail.with({
         to: newEmailAddress,
-        subject: 'Please confirm your account',
-        template: 'email-verify-account',
+        subject: "Confirmez votre compte",
+        template: "email-verify-account",
         templateData: {
           fullName: inputs.fullName,
           token: newUserRecord.emailProofToken
         }
       });
     } else {
-      sails.log.info('Skipping new account email verification... (since `verifyEmailAddresses` is disabled)');
+      sails.log.info(
+        "On évite la vérification du compte par email... (puisque `verifyEmailAddresses` est désactivé)"
+      );
     }
 
-    // Since everything went ok, send our 200 response.
+    // Puisque tout s'est bien passé, envoie notre réponse 200
     return exits.success();
-
   }
-
 };

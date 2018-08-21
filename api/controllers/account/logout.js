@@ -1,52 +1,39 @@
 module.exports = {
+  friendlyName: "Déconnexion",
 
+  description: "Déconnecte l'user.",
 
-  friendlyName: 'Logout',
+  extendedDescription: `Cette action supprime la clé \`req.session.userId\` de la session de l'agent utilisateur envoyant la requête.
+Le 'garbage collection' des données de session dépend du registre de session de cette appli, et potentiellement également de la 
+[TTL configuration](https://sailsjs.com/docs/reference/configuration/sails-config-session)
+définie le concernant.
 
-
-  description: 'Log out of this app.',
-
-
-  extendedDescription:
-`This action deletes the \`req.session.userId\` key from the session of the requesting user agent.
-Actual garbage collection of session data depends on this app's session store, and
-potentially also on the [TTL configuration](https://sailsjs.com/docs/reference/configuration/sails-config-session)
-you provided for it.
-
-Note that this action does not check to see whether or not the requesting user was
-actually logged in.  (If they weren't, then this action is just a no-op.)`,
-
+Cette action ne vérifie pas si l'user était bien logged in.  (Si ce n'est pas le cas, elle ne fait rien.)`,
 
   exits: {
-
     success: {
-      description: 'The requesting user agent has been successfully logged out.'
+      description: "L'utilisateur a bien été déconnecté."
     },
 
     redirect: {
-      description: 'The requesting user agent looks to be a web browser.',
-      extendedDescription: 'After logging out from a web browser, the user is redirected away.',
-      responseType: 'redirect'
+      description: "L'utilisateur semble être un navigateur web.",
+      extendedDescription:
+        "Après déconnexion d'un navigateur web, l'user est redirigé.",
+      responseType: "redirect"
     }
-
   },
 
-
-  fn: async function (inputs, exits) {
-
-    // Clear the `userId` property from this session.
+  fn: async function(inputs, exits) {
+    // Supprime la propriété `userId` de cette session.
     delete this.req.session.userId;
 
-    // Then finish up, sending an appropriate response.
-    // > Under the covers, this persists the now-logged-out session back
-    // > to the underlying session store.
+    // Puis termine, envoyant une réponse appropriée
+    // > Implicitement, cela persiste la session désormais logged out
+    // > dans le registre de session sous-jacent
     if (!this.req.wantsJSON) {
-      throw {redirect: '/login'};
+      throw { redirect: "/login" };
     } else {
       return exits.success();
     }
-
   }
-
-
 };
