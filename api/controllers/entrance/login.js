@@ -1,62 +1,43 @@
 module.exports = {
+  friendlyName: "Login",
 
+  description: "Connexion utilisant le mot de passe et email soumis.",
 
-  friendlyName: 'Login',
-
-
-  description: 'Log in using the provided email and password combination.',
-
-
-  extendedDescription:
-`This action attempts to look up the user record in the database with the
-specified email address.  Then, if such a user exists, it uses
-bcrypt to compare the hashed password from the database with the provided
-password attempt.`,
-
+  extendedDescription: `Cette action essaye de trouver l'utilosateur dans la BDD, puis utilise Bcrypt pour comparer le mot de passe 
+  de l'user haché dans la BDD et le mot de passe soumit, que l'on hache pour l'occasion.`,
 
   inputs: {
-
     emailAddress: {
-      description: 'The email to try in this attempt, e.g. "irl@example.com".',
-      type: 'string',
+      description: 'Email soumit "irl@example.com".',
+      type: "string",
       required: true
     },
 
     password: {
-      description: 'The unencrypted password to try in this attempt, e.g. "passwordlol".',
-      type: 'string',
+      description: "Mot de passe soumit",
+      type: "string",
       required: true
     },
 
     rememberMe: {
-      description: 'Whether to extend the lifetime of the user\'s session.',
-      extendedDescription:
-`Note that this is NOT SUPPORTED when using virtual requests (e.g. sending
-requests over WebSockets instead of HTTP).`,
-      type: 'boolean'
+      description: "Étendre ou non la durée de vie de la session",
+      extendedDescription: `N'est pas supporté par les requêtes virtuelles (ex: WebSockets plutôt qu'HTTP).`,
+      type: "boolean"
     }
-
   },
 
-
   exits: {
-
     success: {
-      description: 'The requesting user agent has been successfully logged in.',
-      extendedDescription:
-`Under the covers, this stores the id of the logged-in user in the session
-as the \`userId\` key.  The next time this user agent sends a request, assuming
-it includes a cookie (like a web browser), Sails will automatically make this
-user id available as req.session.userId in the corresponding action.  (Also note
-that, thanks to the included "custom" hook, when a relevant request is received
-from a logged-in user, that user's entire record from the database will be fetched
-and exposed as \`req.me\`.)`
+      description: "L'agent requis a été connecté avec succès.",
+      extendedDescription: `Implicitement, cette fonction enregistre l'id de l'utilisateur connecté dans la session en tant que
+\`userId\`.  La prochaine fois que l'user envoie une requête incluant un cookie, Sails rendra automatiquement cet utilisateur disponible en tant que
+ req.session.userId dans l'action correspondante.  (Aussi, grâce au hook "custom" inclut dans le code, quand une requête pertinente est reçue d'un user, 
+ l'entrée complète correspondant à cet user sera disponible sous \`req.me\`.)`
     },
 
     badCombo: {
-      description: `The provided email and password combination does not
-      match any user in the database.`,
-      responseType: 'unauthorized'
+      description: `Le couple email / password ne correspond à aucun utilisateur dans la BDD.`,
+      responseType: "unauthorized"
       // ^This uses the custom `unauthorized` response located in `api/responses/unauthorized.js`.
       // To customize the generic "unauthorized" response across this entire app, change that file
       // (see api/responses/unauthorized).
@@ -65,27 +46,25 @@ and exposed as \`req.me\`.)`
       // something else.  For example, you might set `statusCode: 498` and change the
       // implementation below accordingly (see http://sailsjs.com/docs/concepts/controllers).
     }
-
   },
 
-
-  fn: async function (inputs, exits) {
-
+  fn: async function(inputs, exits) {
     // Look up by the email address.
     // (note that we lowercase it to ensure the lookup is always case-insensitive,
     // regardless of which database we're using)
     var userRecord = await User.findOne({
-      emailAddress: inputs.emailAddress.toLowerCase(),
+      emailAddress: inputs.emailAddress.toLowerCase()
     });
 
-    // If there was no matching user, respond thru the "badCombo" exit.
-    if(!userRecord) {
-      throw 'badCombo';
+    // Si l'on ne trouve aucun user, on appelle badCombo
+    if (!userRecord) {
+      throw "badCombo";
     }
 
-    // If the password doesn't match, then also exit thru "badCombo".
-    await sails.helpers.passwords.checkPassword(inputs.password, userRecord.password)
-    .intercept('incorrect', 'badCombo');
+    // Si le mot de passe ne correspond pas, on renvoie également vers badCombo
+    await sails.helpers.passwords
+      .checkPassword(inputs.password, userRecord.password)
+      .intercept("incorrect", "badCombo");
 
     // If "Remember Me" was enabled, then keep the session alive for
     // a longer amount of time.  (This causes an updated "Set Cookie"
@@ -95,21 +74,20 @@ and exposed as \`req.me\`.)`
     if (inputs.rememberMe) {
       if (this.req.isSocket) {
         sails.log.warn(
-          'Received `rememberMe: true` from a virtual request, but it was ignored\n'+
-          'because a browser\'s session cookie cannot be reset over sockets.\n'+
-          'Please use a traditional HTTP request instead.'
+          "Reçu `rememberMe: true` d'une requête virtuelle, mais l'instruction est ignorée,\n" +
+            "car les cookies session d'un utilisateur ne peuvent être remis à zéro par socket.\n" +
+            "Utilisez plutôt une requête http traditionnelle."
         );
       } else {
-        this.req.session.cookie.maxAge = sails.config.custom.rememberMeCookieMaxAge;
+        this.req.session.cookie.maxAge =
+          sails.config.custom.rememberMeCookieMaxAge;
       }
-    }//ﬁ
+    }
 
     // Modify the active session instance.
     this.req.session.userId = userRecord.id;
 
     // Send success response (this is where the session actually gets persisted)
     return exits.success();
-
   }
-
 };

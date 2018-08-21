@@ -1,158 +1,156 @@
 /**
  * User.js
  *
- * A user who can log in to this application.
+ * Un utilisateur qui peut se connecter dans l'application.
  */
 
 module.exports = {
-
   attributes: {
-
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
     emailAddress: {
-      type: 'string',
+      type: "string",
       required: true,
       unique: true,
       isEmail: true,
       maxLength: 200,
-      example: 'carol.reyna@microsoft.com'
+      example: "elsa.validovna@madmoizelle.com"
     },
 
     password: {
-      type: 'string',
+      type: "string",
       required: true,
-      description: 'Securely hashed representation of the user\'s login password.',
+      description: "Représentation cryptée d'un mot de passe utilisateur.",
       protect: true,
-      example: '2$28a8eabna301089103-13948134nad'
+      example: "2$28a8eabna301089103-13948134nad"
     },
 
     fullName: {
-      type: 'string',
+      type: "string",
       required: true,
-      description: 'Full representation of the user\'s name',
+      description: "Représentation d'un nom d'utilisateur",
       maxLength: 120,
-      example: 'Lisa Microwave van der Jenny'
+      example: "Lisa Microwave van der Jenny"
     },
 
     isSuperAdmin: {
-      type: 'boolean',
-      description: 'Whether this user is a "super admin" with extra permissions, etc.',
-      extendedDescription:
-`Super admins might have extra permissions, see a different default home page when they log in,
-or even have a completely different feature set from normal users.  In this app, the \`isSuperAdmin\`
-flag is just here as a simple way to represent two different kinds of users.  Usually, it's a good idea
-to keep the data model as simple as possible, only adding attributes when you actually need them for
-features being built right now.
-
-For example, a "super admin" user for a small to medium-sized e-commerce website might be able to
-change prices, deactivate seasonal categories, add new offerings, and view live orders as they come in.
-On the other hand, for an e-commerce website like Walmart.com that has undergone years of development
-by a large team, those administrative features might be split across a few different roles.
-
-So, while this \`isSuperAdmin\` demarcation might not be the right approach forever, it's a good place to start.`
+      type: "boolean",
+      description: "Explicite",
+      extendedDescription: `Mauvaise idée, on va plutôt utiliser une enum`
     },
 
     passwordResetToken: {
-      type: 'string',
-      description: 'A unique token used to verify the user\'s identity when recovering a password.  Expires after 1 use, or after a set amount of time has elapsed.'
+      type: "string",
+      description:
+        "Chaîne de caractère unique envoyée à l'utilisateur pour l'identifier lors de la perte d'un mot de passe.  Expire au premier usage ou périme."
     },
 
     passwordResetTokenExpiresAt: {
-      type: 'number',
-      description: 'A JS timestamp (epoch ms) representing the moment when this user\'s `passwordResetToken` will expire (or 0 if the user currently has no such token).',
+      type: "number",
+      description:
+        "Un timestamp (epoch ms) représentant le moment où le token expire, vaut 0 si null.",
       example: 1502844074211
     },
 
     stripeCustomerId: {
-      type: 'string',
+      type: "string",
       protect: true,
-      description: 'The id of the customer entry in Stripe associated with this user (or empty string if this user is not linked to a Stripe customer -- e.g. if billing features are not enabled).',
-      extendedDescription:
-`Just because this value is set doesn't necessarily mean that this user has a billing card.
-It just means they have a customer entry in Stripe, which might or might not have a billing card.`
+      description:
+        "L'id de ce client dans Stripe (ou chaîne de caractère vide si Stripe n'est pas activé).",
+      extendedDescription: `La présence d'un id Stripe n'implique pas nécessairement la possession d'une carte de paiement associée à ce compte Stripe.`
     },
 
     hasBillingCard: {
-      type: 'boolean',
-      description: 'Whether this user has a default billing card hooked up as their payment method.',
-      extendedDescription:
-`More specifically, this indcates whether this user record's linked customer entry in Stripe has
-a default payment source (i.e. credit card).  Note that a user have a \`stripeCustomerId\`
-without necessarily having a billing card.`
+      type: "boolean",
+      description:
+        "Vérifie la possession d'une carte de paiement associée au compte Stripe utilisateur.",
+      extendedDescription: `Plus précisément, inqique si l'entrée utilisateur correspondant à cet id utilisateur dans Stripe possède un système de paiement par défaut.`
     },
 
     billingCardBrand: {
-      type: 'string',
-      example: 'Visa',
-      description: 'The brand of this user\'s default billing card (or empty string if no billing card is set up).',
-      extendedDescription: 'To ensure PCI compliance, this data comes from Stripe, where it reflects the user\'s default payment source.'
+      type: "string",
+      example: "Visa",
+      description:
+        "La marque de la carte de paiement de cet utilisateur, ou chaîne de caractère vide.",
+      extendedDescription:
+        "Par conformité à la norme PCI DCSS, cette donnée vient de Stripe, où elle représente la source de paiement par défaut de l'utilisateur."
     },
 
     billingCardLast4: {
-      type: 'string',
-      example: '4242',
-      description: 'The last four digits of the card number for this user\'s default billing card (or empty string if no billing card is set up).',
-      extendedDescription: 'To ensure PCI compliance, this data comes from Stripe, where it reflects the user\'s default payment source.'
+      type: "string",
+      example: "4242",
+      description:
+        "Les 4 derniers chiffres de la carte de paiement utilisateur, ou chaîne vide.",
+      extendedDescription:
+        "Par conformité à la norme PCI DCSS, cette donnée vient de Stripe, où elle représente la source de paiement par défaut de l'utilisateur."
     },
 
     billingCardExpMonth: {
-      type: 'string',
-      example: '08',
-      description: 'The two-digit expiration month from this user\'s default billing card, formatted as MM (or empty string if no billing card is set up).',
-      extendedDescription: 'To ensure PCI compliance, this data comes from Stripe, where it reflects the user\'s default payment source.'
+      type: "string",
+      example: "08",
+      description:
+        "Le mois d'expiration de la carte, en deux chiffres, formatés en MM, ou chaîne vide.",
+      extendedDescription:
+        "Par conformité à la norme PCI DCSS, cette donnée vient de Stripe, où elle représente la source de paiement par défaut de l'utilisateur."
     },
 
     billingCardExpYear: {
-      type: 'string',
-      example: '2023',
-      description: 'The four-digit expiration year from this user\'s default billing card, formatted as YYYY (or empty string if no credit card is set up).',
-      extendedDescription: 'To ensure PCI compliance, this data comes from Stripe, where it reflects the user\'s default payment source.'
+      type: "string",
+      example: "2023",
+      description: "Année d'expiration, formatée en YYYY, ou chaîne vide.",
+      extendedDescription:
+        "Par conformité à la norme PCI DCSS, cette donnée vient de Stripe, où elle représente la source de paiement par défaut de l'utilisateur."
     },
 
     emailProofToken: {
-      type: 'string',
-      description: 'A pseudorandom, probabilistically-unique token for use in our account verification emails.'
+      type: "string",
+      description:
+        "Un token, pseudo-random, probablement unique, utilisé pour la confirmation de compte par e-mail."
     },
 
     emailProofTokenExpiresAt: {
-      type: 'number',
-      description: 'A JS timestamp (epoch ms) representing the moment when this user\'s `emailProofToken` will expire (or 0 if the user currently has no such token).',
+      type: "number",
+      description:
+        "Un timestamp (epoch ms) représentant le moment où le token expire, vaut 0 si null.",
       example: 1502844074211
     },
 
     emailStatus: {
-      type: 'string',
-      isIn: ['unconfirmed', 'changeRequested', 'confirmed'],
-      defaultsTo: 'confirmed',
-      description: 'The confirmation status of the user\'s email address.',
-      extendedDescription:
-`Users might be created as "unconfirmed" (e.g. normal signup) or as "confirmed" (e.g. hard-coded
-admin users).  When the email verification feature is enabled, new users created via the
-signup form have \`emailStatus: 'unconfirmed'\` until they click the link in the confirmation email.
-Similarly, when an existing user changes their email address, they switch to the "changeRequested"
-email status until they click the link in the confirmation email.`
+      type: "string",
+      isIn: ["unconfirmed", "changeRequested", "confirmed"],
+      defaultsTo: "confirmed",
+      description:
+        "Statut de confirmation de l'adresse e-mail de cet utilisateur.",
+      extendedDescription: `Les utilisateurs peuvent être créés comme étant confirmés ou non-confirmés.  
+      Quand le service de confirmation d'e-mail est activé, les formulaires d'inscription on le statut 
+"unconfirmed" jusqu'à la validation du lien de confirmation envoyé par email.
+Aussi, quand un utilisateur demande un changement de password, son statut devient "changeRequested"
+jusqu'à la validation du lien de confirmation envoyé par email.`
     },
 
     emailChangeCandidate: {
-      type: 'string',
-      description: 'The (still-unconfirmed) email address that this user wants to change to.'
+      type: "string",
+      description:
+        "L'e-mail en cours de confirmation que l'utilisateur souhaite substituer à son email actuel."
     },
 
     tosAcceptedByIp: {
-      type: 'string',
-      description: 'The IP (ipv4) address of the request that accepted the terms of service.',
-      extendedDescription: 'Useful for certain types of businesses and regulatory requirements (KYC, etc.)',
-      moreInfoUrl: 'https://en.wikipedia.org/wiki/Know_your_customer'
+      type: "string",
+      description:
+        "L'IP (ipv4) de l'user ayant accepté les conditions du service.",
+      extendedDescription:
+        "Utile dans certaines entreprises et pour des contraintes de régulation (KYC, etc.)",
+      moreInfoUrl: "https://en.wikipedia.org/wiki/Know_your_customer"
     },
 
     lastSeenAt: {
-      type: 'number',
-      description: 'A JS timestamp (epoch ms) representing the moment at which this user most recently interacted with the backend while logged in (or 0 if they have not interacted with the backend at all yet).',
+      type: "number",
+      description:
+        "Un timestamp (epoch ms) représentant le dernier moment où l'user a interagit avec le backend, ou 0 si null.",
       example: 1502844074211
-    },
+    }
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
@@ -163,8 +161,5 @@ email status until they click the link in the confirmation email.`
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
     // n/a
-
-  },
-
-
+  }
 };

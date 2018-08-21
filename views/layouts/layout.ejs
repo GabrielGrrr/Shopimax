@@ -74,10 +74,10 @@
     <% if(me&&me.emailChangeCandidate) { %>
       <div class="container-fluid">
         <div class="alert alert-secondary mt-2" role="alert">
-          Your updated email address needs verification. Until you click the link sent to
+          Votre adresse e-mail doit être confirmée. Tant que vous n'aurez pas cliqué sur le lien envoyé à
           <strong>
             <%= me.emailChangeCandidate %>
-          </strong>, you'll still need to sign in as
+          </strong>, vous devrez vous connecter en tant que
           <strong>
             <%= me.emailAddress %>
           </strong>.
@@ -86,7 +86,8 @@
       <% } else if(me&&me.emailStatus === 'unconfirmed') { %>
         <div class="container-fluid">
           <div class="alert alert-secondary mt-2" role="alert">
-            Your email address still needs verification. Your account access may be limited until you click the link sent to
+            Votre adresse e-mail doit encore être confirmée. Your account access may be limited Tant que vous n'aurez pas cliqué sur
+            le lien envoyé à
             <strong>
               <%= me.emailChangeCandidate ? me.emailChangeCandidate : me.emailAddress%>
             </strong>.
@@ -99,28 +100,26 @@
             <footer id="page-footer" class="navbar navbar-light justify-content-between flex-row-reverse">
               <div class="nav">
                 <small class="nav-item">
-                  <a class="nav-link text-info" href="/contact">Contact
-                    <span class="d-none d-sm-inline"> us</span>
+                  <a class="nav-link text-info" href="/contact">Contactez-nous
                   </a>
                 </small>
                 <small class="nav-item">
-                  <a class="nav-link text-info" href="/legal/terms">Terms
-                    <span class="d-none d-sm-inline"> of Use</span>
+                  <a class="nav-link text-info" href="/legal/terms">Règles
+                    <span class="d-none d-sm-inline"> d'utilisation</span>
                   </a>
                 </small>
                 <small class="nav-item">
-                  <a class="nav-link text-info" href="/legal/privacy">Privacy
-                    <span class="d-none d-sm-inline"> policy</span>
+                  <a class="nav-link text-info" href="/legal/privacy">Vie privée
                   </a>
                 </small>
                 <% if(me) { %>
                   <small class="nav-item">
-                    <a class="nav-link text-info" href="/logout">Sign out</a>
+                    <a class="nav-link text-info" href="/logout">Déconnexion</a>
                   </small>
                   <% } %>
               </div>
-              <small class="copy">Copyright &copy; 2018 NEW_APP_COMPANY.
-                <br class="xs-only" />All rights reserved.</small>
+              <small class="copy">Copyright &copy; 2018 Compagnie tout à fait fantasmagorique.
+                <br class="xs-only" />Tous droits réservés.</small>
             </footer>
   </div>
 
