@@ -26,7 +26,7 @@ module.exports = {
       type: "string",
       required: true,
       maxLength: 120,
-      example: "Licorne argentée de 22cm par NondemarqueTM"
+      example: "Chimère irisée X3000"
     },
     details: {
       type: "json"

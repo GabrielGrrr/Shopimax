@@ -2,8 +2,8 @@
  * Seller.js
  *
  * @description :: FR : Un modèle qui recense une entreprise. Ce modèle de base, relativement exhaustif, ne prend pas en compte le traitement et le stockage des documents
- * attestant des différentes informations précisées ici (extrait K-bis, etc.), ni les informations relatives aux transactions financières puisque cette fonctionnalité ne sera
- * jamais activée dans cette application.
+ * attestant des différentes informations précisées ici (extrait K-bis, etc.), l'EDI ne faisant pas partie du champ de cette application,
+ * ni les informations relatives aux transactions financières puisque cette fonctionnalité ne sera jamais activée dans cette application.
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
  */
 
@@ -12,10 +12,11 @@ module.exports = {
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
+    // LEGAL
     companyName: {
       type: "string",
       required: true,
-      description: "Dénomination sociale",
+      description: "Dénomination / Raison sociale",
       maxLength: 131,
       minLength: 2,
       example: "Europa Corp"
@@ -98,6 +99,7 @@ module.exports = {
     siren: {
       type: "string",
       required: true,
+      unique: true,
       maxLength: 11,
       description: "Identifiant SIREN",
       example: "123 456 789"
@@ -128,6 +130,29 @@ module.exports = {
       isURL: true,
       description: "Le site web de la société, si elle en a un",
       example: "http://www.armabuwax.com"
+    },
+    // POLITIQUE DE RETOUR ET D'EXPEDITION
+    sendingPolicy: {
+      type: "string",
+      description: "Politique d'expédition",
+      maxLength: 131,
+      minLength: 2,
+      example:
+        "Sauf indication contraire lors de la commande, tous les articles seront envoyés sous deux jours suivant la réception d'une commande." +
+        "Vous recevrez une notification en cas de retard ou d'annulation de votre commande.",
+      defaultsTo:
+        "Sauf indication contraire lors de la commande, tous les articles seront envoyés sous deux jours suivant la réception d'une commande." +
+        "Vous recevrez une notification en cas de retard ou d'annulation de votre commande."
+    },
+    returnPolicy: {
+      type: "string",
+      description: "Politique de retour",
+      maxLength: 131,
+      minLength: 2,
+      example:
+        "Vous disposez d’un délai de 30 jours suivant la date de réception pour retourner un article commandé",
+      defaultsTo:
+        "Vous disposez d’un délai de 30 jours suivant la date de réception pour retourner un article commandé"
     },
     // CONTACT INFORMATIONS
     fullname: {

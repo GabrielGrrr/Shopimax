@@ -308,6 +308,11 @@ module.exports = {
       maxLength: 120,
       description: "Code Postal",
       example: "34090"
+    },
+    phoneNumber: {
+      type: "string",
+      required: true,
+      maxLength: 15
     }
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗

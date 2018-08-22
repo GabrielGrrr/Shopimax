@@ -150,7 +150,7 @@ jusqu'à la validation du lien de confirmation envoyé par email.`
       description:
         "Un timestamp (epoch ms) représentant le dernier moment où l'user a interagit avec le backend, ou 0 si null.",
       example: 1502844074211
-    }
+    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
@@ -160,6 +160,8 @@ jusqu'à la validation du lien de confirmation envoyé par email.`
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-    // n/a
+    address: {
+      model: "address"
+    }
   }
 };
