@@ -13,7 +13,6 @@ module.exports = {
     content: {
       type: "string",
       required: true,
-      maxLength: 1000,
       example: "C tro dla bal 5 ETOILE DIRECT"
     },
     rating: {
