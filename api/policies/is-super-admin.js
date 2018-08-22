@@ -16,11 +16,11 @@ module.exports = async function(req, res, proceed) {
     return res.unauthorized();
   } //•
 
-  // Puis, on vérifie que le statut corresponde à un SU
+  // Puis, on vérifie que le statut corresponde à un SuperAdmin
   if (!req.me.isSuperAdmin) {
     return res.forbidden();
   } //•
 
-  //On a bien un SU
+  //On a bien un SuperAdmin
   return proceed();
 };

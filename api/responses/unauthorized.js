@@ -1,16 +1,16 @@
 /**
  * unauthorized.js
  *
- * A custom response that content-negotiates the current request to either:
- *  • log out the current user and redirect them to the login page
- *  • or send back 401 (Unauthorized) with no response body.
+ * Une réponse personnalisée qui modifie le conenu de la requête actuelle pour qu'il :
+ *  • déconnecte l'user et le redirige vers son login
+ *  • ou renvoie une erreur 401 (Unauthorized) sans corps de réponse.
  *
- * Example usage:
+ * Exemple:
  * ```
  *     return res.unauthorized();
  * ```
  *
- * Or with actions2:
+ * Ou:
  * ```
  *     exits: {
  *       badCombo: {
@@ -21,23 +21,20 @@
  * ```
  */
 module.exports = function unauthorized() {
-
   var req = this.req;
   var res = this.res;
 
-  sails.log.verbose('Ran custom response: res.unauthorized()');
+  sails.log.verbose("Envoyé réponse personnalisée : res.unauthorized()");
 
   if (req.wantsJSON) {
     return res.sendStatus(401);
   }
-  // Or log them out (if necessary) and then redirect to the login page.
+  // Ou déconnexion de l'user (si nécessaire) puis redirection vers le login.
   else {
-
     if (req.session.userId) {
       delete req.session.userId;
     }
 
-    return res.redirect('/login');
+    return res.redirect("/login");
   }
-
 };

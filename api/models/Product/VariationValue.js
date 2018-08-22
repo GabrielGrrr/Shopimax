@@ -1,5 +1,5 @@
 /**
- * Seller.js
+ * Product/VariationValue.js
  *
  * @description :: A model definition.  Represents a database table/collection/etc.
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
@@ -10,13 +10,15 @@ module.exports = {
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
-    companyName: {
+    createdAt: false,
+    updatedAt: false,
+    name: {
       type: "string",
-      required: false,
+      required: true,
       maxLength: 120,
-      example: "Blaboblu"
-    }
-
+      example:
+        "Bleu, XS, Femme, 10-12 ans, 43, Cuir, Xiaomi, Automne-Hiver 2017 ..."
+    },
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
@@ -24,5 +26,15 @@ module.exports = {
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
+    images: {
+      collection: "productimage"
+    },
+    details: {
+      type: "json"
+    },
+    variation: {
+      model: "productvariation",
+      via: "values"
+    }
   }
 };

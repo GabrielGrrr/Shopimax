@@ -1,16 +1,16 @@
 /**
  * expired.js
  *
- * A custom response that content-negotiates the current request to either:
- *  • serve an HTML error page about the specified token being invalid or expired
- *  • or send back 498 (Token Expired/Invalid) with no response body.
+ * Une réponse personnalisée qui modifie le conenu de la requête actuelle pour qu'il :
+ *  • serve une page HTML d'erreur a propos du token spécifié étant invalide ou expiré
+ *  • ou envoie une erreur 498 (Token Expired/Invalid) sans corps de réponse.
  *
- * Example usage:
+ * Exemple :
  * ```
  *     return res.expired();
  * ```
  *
- * Or with actions2:
+ * Ou :
  * ```
  *     exits: {
  *       badToken: {
@@ -21,17 +21,14 @@
  * ```
  */
 module.exports = function expired() {
-
   var req = this.req;
   var res = this.res;
 
-  sails.log.verbose('Ran custom response: res.expired()');
+  sails.log.verbose("Envoyé réponse personnalisée : res.expired()");
 
   if (req.wantsJSON) {
-    return res.status(498).send('Token Expired/Invalid');
+    return res.status(498).send("Token Expired/Invalid");
+  } else {
+    return res.status(498).view("498");
   }
-  else {
-    return res.status(498).view('498');
-  }
-
 };
