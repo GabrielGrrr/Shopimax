@@ -366,19 +366,19 @@ Si un mail de vérification est envoyé, le compte du nouvel user est mis dans u
 
   fn: async function(inputs, exits) {
     var newEmailAddress = inputs.emailAddress.toLowerCase();
-    sails.log(inputs);
+
     var newUserAddress = await Address.create({
-      country: "France",
-      area: "inputs.area",
-      city: "inputs.city",
-      address: "inputs.address",
-      additionnalAddress: "inputs.additionnalAddress",
-      postalCode: "inputs.postalCode",
-      phoneNumber: "inputs.phone"
+      country: inputs.country,
+      area: inputs.area,
+      city: inputs.city,
+      address: inputs.address,
+      additionnalAddress: inputs.additionnalAddress,
+      postalCode: inputs.postalCode,
+      phoneNumber: inputs.phoneNumber
     })
       .intercept({ name: "UsageError" }, "invalid")
       .fetch();
-    sails.log(newUserAddress);
+
     // Construit les données pour le nouvel utilisateur et les enregistre dans le SGBD
     // (Aussi, utilise `fetch` pour récupérer le nouvel ID afin que l'on puisse l'utiliser ci-dessous.)
     var newUserRecord = await User.create(

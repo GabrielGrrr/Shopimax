@@ -58,11 +58,11 @@ module.exports = {
     },
     categories: {
       collection: "categoryvalue",
-      via: "product"
+      via: "products"
     },
     variations: {
       collection: "productvariation",
-      via: "product"
+      via: "products"
     }
   }
 };
