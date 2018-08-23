@@ -23,6 +23,9 @@ module.exports = {
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
     createdAt: false,
     updatedAt: false,
+    rank: {
+      type: "number"
+    },
     name: {
       type: "string",
       required: true,
@@ -37,6 +40,9 @@ module.exports = {
       example:
         "Général/Root {Vêtements, Bricolage, Parfumerie, Hi-Tech ...}, Genre, Matière, Marque, Collection ..."
     },
+    img: {
+      type: "string",
+    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
@@ -45,6 +51,13 @@ module.exports = {
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
+    parent: {
+      model: "productcategory",
+    },
+    children: {
+      collection: "productcategory",
+      via: "parent"
+    },
     values: {
       collection: "categoryvalue",
       via: "category"

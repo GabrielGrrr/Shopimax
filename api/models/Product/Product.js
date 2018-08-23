@@ -38,6 +38,14 @@ module.exports = {
       extendedDescription: `Si oui, une offre de vente (stock, prix, délais, fdp etc.) sera spécifique à chaque variation, ainsi que, potentiellement, un ensemble d'image`,
       defaultsTo: false
     },
+    viewCount: {
+      type: "number",
+      defaultsTo: 0
+    },
+    saleCount: {
+      type: "number",
+      defaultsTo: 0
+    },
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝

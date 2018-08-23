@@ -49,9 +49,6 @@ module.exports = {
     seller: {
       model: "seller"
     },
-    sender: {
-      model: "sender"
-    },
     product: {
       model: "product"
     },

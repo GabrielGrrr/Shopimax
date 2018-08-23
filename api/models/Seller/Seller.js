@@ -37,14 +37,13 @@ module.exports = {
         "E.I.R.L.",
         "Association"
       ],
-      maxLength: 20,
+      maxLength: 21,
       example: "S.A.R.L."
     },
     dateCreation: {
       type: "string",
       required: true,
       isBefore: new Date(),
-      maxLength: 20,
       example: "01/04/1976"
     },
     sector: {
@@ -113,7 +112,7 @@ module.exports = {
     rcs: {
       type: "string",
       required: true,
-      maxLength: 40,
+      maxLength: 100,
       description: "Identifiant au registre du commerce et des sociétés",
       example: "123 456 789 RCS de Paris"
     },
@@ -134,7 +133,6 @@ module.exports = {
     sendingPolicy: {
       type: "string",
       description: "Politique d'expédition",
-      maxLength: 131,
       minLength: 2,
       example:
         "Sauf indication contraire lors de la commande, tous les articles seront envoyés sous deux jours suivant la réception d'une commande." +
@@ -146,7 +144,6 @@ module.exports = {
     returnPolicy: {
       type: "string",
       description: "Politique de retour",
-      maxLength: 131,
       minLength: 2,
       example:
         "Vous disposez d’un délai de 30 jours suivant la date de réception pour retourner un article commandé",
@@ -154,7 +151,7 @@ module.exports = {
         "Vous disposez d’un délai de 30 jours suivant la date de réception pour retourner un article commandé"
     },
     // CONTACT INFORMATIONS
-    fullname: {
+    fullName: {
       type: "string",
       required: true,
       description: "Nom complet du contact dans l'entreprise",
@@ -172,7 +169,7 @@ module.exports = {
     phoneNumber: {
       type: "string",
       required: true,
-      maxLength: 15
+      maxLength: 50
     },
     password: {
       type: "string",

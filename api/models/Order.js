@@ -19,14 +19,17 @@ module.exports = {
       isIn: ["Awaiting", "Validated", "Sent", "Received"],
       defaultsTo: "Awaiting"
     },
-    refundAsked: {
-      type: "boolean",
-      defaultsTo: false
-    },
-    refundStatus: {
+    trackingNumber: {
       type: "string",
-      isIn: ["Awaiting", "Validated", "Refunded"],
-      defaultsTo: "Awaiting"
+    },
+    dateSent: {
+      type: "string"
+    },
+    dateReceived: {
+      type: "string"
+    },
+    hasBeenRated: {
+      type: "boolean"
     },
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
