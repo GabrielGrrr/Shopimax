@@ -162,6 +162,10 @@ jusqu'à la validation du lien de confirmation envoyé par email.`
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
     address: {
       model: "address"
+    },
+    comments: {
+      collection: "productcomment",
+      via: "author"
     }
   }
 };

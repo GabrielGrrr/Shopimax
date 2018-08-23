@@ -21,14 +21,12 @@ module.exports = {
     overrideImage: {
       type: "boolean",
       defaultsTo: false,
-      required: true,
       description:
         "Est-ce que cette variation de produit possède ses propres photos qui remplaceront celles du produit"
     },
     overrideDetails: {
       type: "boolean",
       defaultsTo: false,
-      required: true,
       description:
         "Est-ce que cette variation de produit possède ses propres détails techniques qui remplaceront ceux du produit"
     },
@@ -48,6 +46,10 @@ module.exports = {
     values: {
       collection: "variationvalue",
       via: "variation"
+    },
+    products: {
+      collection: "product",
+      via: "variations"
     }
   }
 };

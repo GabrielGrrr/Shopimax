@@ -19,6 +19,9 @@ module.exports = {
       example:
         "Bleu, XS, Femme, 10-12 ans, 43, Cuir, Xiaomi, Automne-Hiver 2017 ..."
     },
+    details: {
+      type: "json"
+    },
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
@@ -27,10 +30,8 @@ module.exports = {
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
     images: {
-      collection: "productimage"
-    },
-    details: {
-      type: "json"
+      collection: "productimage",
+      via: "variation"
     },
     variation: {
       model: "productvariation",

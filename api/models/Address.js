@@ -312,7 +312,7 @@ module.exports = {
     phoneNumber: {
       type: "string",
       required: true,
-      maxLength: 15
+      maxLength: 50
     }
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗

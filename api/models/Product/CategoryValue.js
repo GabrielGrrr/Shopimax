@@ -31,7 +31,12 @@ module.exports = {
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
     category: {
-      model: "category"
+      model: "productcategory",
+      via: "values"
+    },
+    products: {
+      collection: "product",
+      via: "categories"
     }
   }
 };

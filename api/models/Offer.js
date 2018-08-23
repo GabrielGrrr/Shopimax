@@ -13,7 +13,6 @@ module.exports = {
     type: {
       type: "string",
       isIn: ["Neuf", "Reconditionné", "Occasion"],
-      required: true,
       defaultsTo: "Neuf"
     },
     price: {
@@ -31,8 +30,7 @@ module.exports = {
     //équivalent au FBA : Shopimax s'assure des retours et livraisons
     sentByShopimax: {
       type: "boolean",
-      required: true,
-      defaultsTo: true,
+      defaultsTo: false,
       description:
         "Profitez du service d'envoi par Shopimax : On s'occuppe de toute la livraison et les retours, et vous gardez un contrôle sur le prix auquel est vendu votre produit",
       extendedDescription:

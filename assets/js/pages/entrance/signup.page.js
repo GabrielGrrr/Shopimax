@@ -1,23 +1,27 @@
-parasails.registerPage('signup', {
+parasails.registerPage("signup", {
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     // Form data
-    formData: { /* … */ },
+    formData: {
+      /* … */
+    },
 
     // For tracking client-side validation errors in our form.
     // > Has property set to `true` for each invalid property in `formData`.
-    formErrors: { /* … */ },
+    formErrors: {
+      /* … */
+    },
 
     // Syncing / loading state
     syncing: false,
 
     // Server error state
-    cloudError: '',
+    cloudError: "",
 
     // Success state when form has been submitted
-    cloudSuccess: false,
+    cloudSuccess: false
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -35,18 +39,16 @@ parasails.registerPage('signup', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-
     submittedForm: async function() {
-      if(this.isEmailVerificationRequired) {
+      if (this.isEmailVerificationRequired) {
         // If email confirmation is enabled, show the success message.
         this.cloudSuccess = true;
-      }
-      else {
+      } else {
         // Otherwise, redirect to the logged-in dashboard.
         // > (Note that we re-enable the syncing state here.  This is on purpose--
         // > to make sure the spinner stays there until the page navigation finishes.)
         this.syncing = true;
-        window.location = '/';
+        window.location = "/";
       }
     },
 
@@ -57,27 +59,30 @@ parasails.registerPage('signup', {
       var argins = this.formData;
 
       // Validate full name:
-      if(!argins.fullName) {
+      if (!argins.fullName) {
         this.formErrors.fullName = true;
       }
 
       // Validate email:
-      if(!argins.emailAddress || !parasails.util.isValidEmailAddress(argins.emailAddress)) {
+      if (
+        !argins.emailAddress ||
+        !parasails.util.isValidEmailAddress(argins.emailAddress)
+      ) {
         this.formErrors.emailAddress = true;
       }
 
       // Validate password:
-      if(!argins.password) {
+      if (!argins.password) {
         this.formErrors.password = true;
       }
 
       // Validate password confirmation:
-      if(argins.password && argins.password !== argins.confirmPassword) {
+      if (argins.password && argins.password !== argins.confirmPassword) {
         this.formErrors.confirmPassword = true;
       }
 
       // Validate ToS agreement:
-      if(!argins.agreed) {
+      if (!argins.agreed) {
         this.formErrors.agreed = true;
       }
 
@@ -89,7 +94,6 @@ parasails.registerPage('signup', {
       }
 
       return argins;
-    },
-
+    }
   }
 });

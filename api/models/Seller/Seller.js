@@ -92,7 +92,6 @@ module.exports = {
     nbEmployee: {
       type: "number",
       required: true,
-      defaultsTo: 1,
       min: 1,
       description: "Nombre de salariés"
     },

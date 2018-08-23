@@ -57,13 +57,12 @@ module.exports = {
       via: "product"
     },
     categories: {
-      collection: "categoryvalue"
+      collection: "categoryvalue",
+      via: "product"
     },
     variations: {
-      collection: "productvariation"
-    },
-    creator: {
-      model: "seller"
+      collection: "productvariation",
+      via: "product"
     }
   }
 };

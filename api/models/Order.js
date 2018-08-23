@@ -12,8 +12,7 @@ module.exports = {
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
     cardinal: {
       type: "number",
-      required: true,
-      defaultsTo: 1
+      required: true
     },
     status: {
       type: "string",

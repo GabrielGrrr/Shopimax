@@ -30,10 +30,12 @@ module.exports = {
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
     product: {
-      model: "product"
+      model: "product",
+      via: "comments"
     },
     author: {
-      model: "user"
+      model: "user",
+      via: "comments"
     }
   }
 };
