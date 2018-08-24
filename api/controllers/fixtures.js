@@ -10,67 +10,33 @@ module.exports = {
       responseType: "badRequest",
       description: "La fixture ne fonctionne pas.",
       extendedDescription:
-        " Avez-vous bien installé le module faker ? npm install faker et c'est réglé ! ;) Assurez-vous d'avoir bien défini un adapter approprié à votre SGBD. Sinon, allez jeter un oeil dans controllers/fixtures.js."
+        " Avez-vous bien installé le module faker ? npm install faker et c'est réglé ! ;)" +
+        "Assurez-vous d'avoir bien défini un adapter approprié à votre SGBD. Sinon, allez jeter un oeil dans controllers/fixtures.js."
     }
   },
 
   fn: async function (inputs, exits) {
-    var countries = await sails.helpers.countrylist();
-    var statuses = [
-      "S.A.",
-      "S.A.S.",
-      "S.A.S.U.",
-      "S.A.R.L.",
-      "E.U.R.L.",
-      "S.C.",
-      "S.C.I.",
-      "S.N.C.",
-      "auto/micro-entreprise",
-      "E.I.R.L.",
-      "Association"
-    ];
-    var sectors = [
-      "Agriculture",
-      "Mode, industrie textile",
-      "Industrie alimentaire",
-      "Chimie, pharmacie",
-      "Audiovisuel - Spectacle",
-      "Social",
-      "Énergie",
-      "Construction aéronautique, ferroviaire et navale",
-      "Banque, assurance",
-      "Maintenance, entretien",
-      "Fonction publique",
-      "Edition, Journalisme",
-      "Armée, sécurité",
-      "Recherche",
-      "Informatique et télécoms",
-      "Commerce, distribution",
-      "Audit, gestion",
-      "Sport, loisirs – Tourisme",
-      "Enseignement",
-      "Culture - Artisanat d'art",
-      "Électronique",
-      "Mécanique",
-      "Hôtellerie, restauration",
-      "Logistique, transport",
-      "Art, Design",
-      "Santé",
-      "Traduction - interprétariat",
-      "Communication - Marketing - Pub",
-      "Automobile",
-      "BTP, architecture",
-      "Environnement",
-      "Droit, justice",
-      " Verre, béton, céramique"
-    ];
+
+    var countries = await sails.helpers.getenum("countries");
+    var statuses = await sails.helpers.getenum("statuses");
+    var sectors = await sails.helpers.getenum("sectors");
 
     var faker = await require("faker");
-    var nbUsers = 50;
+    var nbUsers = 200;
     var nbSellers = 100;
     var nbProducts = 1000;
     var nbAvgComment = 25;
     var nbAvgSellerReview = 10;
+    var nbImageMax = 6;
+    var nbDetailsMax = 15;
+
+    // On bouclera là-dessus pour ajouter plus de diversité graphique. Varier les tailles tend aussi à faire varier les images selon le fournisseur.
+    var imageSuppliers = [
+      "http://lorempixel.com/",
+      "https://loremflickr.com/",
+      "http://placekitten.com/",
+      "https://picsum.photos/"
+    ];
 
     sails.log(
       "On entame les fixtures, avec un nombre d'utilisateurs de " +
@@ -80,29 +46,6 @@ module.exports = {
       ", un nombre de commentaires moyens de " +
       nbAvgComment
     );
-    var addresses = [];
-    var address;
-
-    var buyers = [];
-    var buyer;
-
-    var sellers = [];
-    var seller;
-
-    var sellerRvws = [];
-    var sellerRvw;
-
-    var products = [];
-    var product;
-
-    var pdctCategories = [];
-    var pdctCategorie;
-
-    var catValues = [];
-    var catValue;
-
-    var pdctVariations = [];
-    var pdctVariation;
 
     var varValues = [];
     var varValue;
@@ -119,6 +62,8 @@ module.exports = {
     var orders = [];
     var order;
 
+    var addresses = [];
+    var address;
     // ADRESSES, on en génère autant que d'acheteurs et de vendeurs. Techniquement il est possible, et relativement simple, d'incorporer des adresses multiples
     // de facturation et de livraison pour le client, en modifiant la modalité relationnelle (one way vers one to many) et en incorporant des tableaux d'adresses
     sails.log("Generating " + (nbUsers + nbSellers) + " addresses ...");
@@ -136,6 +81,9 @@ module.exports = {
       addresses.push(address.id);
     }
 
+
+    var buyers = [];
+    var buyer;
     // ACHETEURS
     sails.log("Generating " + nbUsers + " users ...");
     for (i = 0; i < nbUsers; i++) {
@@ -154,10 +102,13 @@ module.exports = {
       buyers.push(buyer.id);
     }
 
+
+    var sellers = [];
+    var seller;
+    var SIREN;
     // Complètement overkill ici, mais j'ai envie de faire de la validation avancée sur les champs de sellers, et d'un point de vue
     // culture g c'est toujours intéressant de se plonger dans le droit des entreprises. Donc SIREN, SIRET, RCS et co. sont formatés selon
     // les spécifications du droit français. La sending / return policy reste la même, cette propriété est de toute façon passablement inutile mais toujours un plus.
-    var SIREN;
     // VENDEURS
     sails.log("Generating " + nbSellers + " sellers ...");
     for (i = 0; i < nbSellers; i++) {
@@ -190,12 +141,16 @@ module.exports = {
       sellers.push(seller.id);
     }
 
+
+
+    var sellerRvws = [];
+    var sellerRvw;
     // NOTATION VENDEUR
     sails.log("Generating " + (nbAvgSellerReview * nbSellers) + " seller reviews ...");
     for (i = 0; i < nbAvgSellerReview * nbSellers; i++) {
       sellerRvw = await SellerReview.create({
         content: await faker.lorem.paragraphs(),
-        rating: await Math.floor((await Math.random()) * 5),
+        rating: await Math.floor(((await Math.random()) * 5) + 1),
         seller: sellers[await Math.floor((await Math.random()) * nbSellers)],
         author: buyers[await Math.floor((await Math.random()) * nbUsers)],
       }).fetch();
@@ -204,8 +159,56 @@ module.exports = {
 
     // CATEGORIES
     sails.log("Generating product categories ...");
-    pdctCategories = await sails.helpers.generatecategories();
+    var categories = await sails.helpers.generatecategories();
 
+
+    // VARIATIONS
+    sails.log("Generating general products variations ...");
+    var variations = await sails.helpers.generatevariations();
+
+    // PRODUCTS
+    var products = [];
+    var product;
+    var randBool;
+    var randNbDetails;
+    var randNbImages;
+    var details;
+    var pdctImage;
+    var pdctImages = [];
+
+    var nbImgSuppliers = imageSuppliers.length;
+
+    sails.log("Generating " + nbProducts + " products ...");
+    for (i = 0; i < nbProducts; i++) {
+      randNbDetails = await Math.ceil(await Math.random() * nbDetailsMax) + 1;
+      randNbImages = await Math.ceil(await Math.random() * nbImageMax) + 1;
+      //randBool = await Math.random() < 0.5;
+
+      details = "{ ";
+      for (x = 0; x < randNbDetails + 1; x++) {
+        details += '"' + await faker.lorem.word() + '" : "' + await faker.lorem.sentence() + '" , ';
+      }
+      details += " }";
+
+      pdctImages = [];
+      for (y = 0; y < randNbImages; y++) {
+        pdctImage = await ProductImage.create({
+          url: imageSuppliers[await Math.floor((await Math.random()) * imageSuppliers.length)] + ""
+            + (await Math.floor((await Math.random()) * 200) + 300)
+            + "/" + (await Math.floor((await Math.random()) * 200) + 400)
+        }).fetch();
+        await pdctImages.push(pdctImage.id);
+      }
+
+      product = await Product.create({
+        name: await faker.commerce.productAdjective() + " " + await faker.commerce.product(),
+        brand: await faker.company.companyName(),
+        details: details,
+        images: pdctImages,
+        categories: [categories[await Math.floor((await Math.random()) * categories.length)]],
+      }).fetch();
+      await products.push(product.id);
+    }
 
     return exits.success();
   }

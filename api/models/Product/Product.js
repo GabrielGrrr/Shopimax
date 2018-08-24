@@ -25,8 +25,10 @@ module.exports = {
     name: {
       type: "string",
       required: true,
-      maxLength: 120,
       example: "Chimère irisée X3000"
+    },
+    brand: {
+      type: "string"
     },
     details: {
       type: "json"
@@ -54,7 +56,6 @@ module.exports = {
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
     images: {
       collection: "productimage",
-      via: "product"
     },
     comments: {
       collection: "productcomment",
@@ -65,7 +66,7 @@ module.exports = {
       via: "product"
     },
     categories: {
-      collection: "categoryvalue",
+      collection: "ProductCategory",
       via: "products"
     },
     variations: {

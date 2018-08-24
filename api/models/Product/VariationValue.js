@@ -30,12 +30,10 @@ module.exports = {
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
     images: {
-      collection: "productimage",
-      via: "variation"
+      collection: "productimage"
     },
     variation: {
       model: "productvariation",
-      via: "values"
     }
   }
 };

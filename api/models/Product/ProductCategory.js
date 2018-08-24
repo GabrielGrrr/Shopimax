@@ -51,16 +51,17 @@ module.exports = {
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-    parent: {
-      model: "productcategory",
+    parents: {
+      collection: "productcategory",
+      via: "children"
     },
     children: {
       collection: "productcategory",
-      via: "parent"
+      via: "parents"
     },
-    values: {
-      collection: "categoryvalue",
-      via: "category"
+    products: {
+      collection: "product",
+      via: "categories"
     }
   }
 };
