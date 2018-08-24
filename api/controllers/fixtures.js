@@ -24,9 +24,10 @@ module.exports = {
     var faker = await require("faker");
     var nbUsers = 200;
     var nbSellers = 100;
-    var nbProducts = 1000;
-    var nbAvgComment = 25;
+    var nbProducts = 500;
+    var nbAvgComments = 10;
     var nbAvgSellerReview = 10;
+    var nbAvgOffers = 6;
     var nbImageMax = 6;
     var nbDetailsMax = 15;
 
@@ -41,26 +42,16 @@ module.exports = {
     sails.log(
       "On entame les fixtures, avec un nombre d'utilisateurs de " +
       nbUsers +
+      ", de vendeurs de " + nbSellers +
       ", un nombre de produits de " +
       nbProducts +
       ", un nombre de commentaires moyens de " +
-      nbAvgComment
+      nbAvgComments +
+      ", un nombre de notations vendeurs moyens de " +
+      nbAvgSellerReview + ", " +
+      nbImageMax + " images maximum par produit et " +
+      nbDetailsMax + " éléments dans les spécifications techniques, au maximum, par produit. Ces données sont paramétrables dans fixtures.js."
     );
-
-    var varValues = [];
-    var varValue;
-
-    var pdctImages = [];
-    var pdctImages;
-
-    var pdctComments = []
-    var pdctComment;
-
-    var offers = [];
-    var offer;
-
-    var orders = [];
-    var order;
 
     var addresses = [];
     var address;
@@ -166,7 +157,7 @@ module.exports = {
     sails.log("Generating general products variations ...");
     var variations = await sails.helpers.generatevariations();
 
-    // PRODUCTS
+
     var products = [];
     var product;
     var randBool;
@@ -175,9 +166,7 @@ module.exports = {
     var details;
     var pdctImage;
     var pdctImages = [];
-
-    var nbImgSuppliers = imageSuppliers.length;
-
+    // PRODUCTS --- Will complexify this a little bit to add stuff like relevant set of categories / brand / images
     sails.log("Generating " + nbProducts + " products ...");
     for (i = 0; i < nbProducts; i++) {
       randNbDetails = await Math.ceil(await Math.random() * nbDetailsMax) + 1;
@@ -209,6 +198,46 @@ module.exports = {
       }).fetch();
       await products.push(product.id);
     }
+
+
+    var pdctComments = []
+    var pdctComment;
+    // COMMENTS
+    sails.log("Generating " + (nbAvgComments * nbProducts) + " comments ...");
+    for (i = 0; i < nbAvgComments * nbProducts; i++) {
+      pdctComment = await ProductComment.create({
+        content: await faker.lorem.paragraphs(),
+        rating: await Math.floor(((await Math.random()) * 5) + 1),
+        product: products[await Math.floor((await Math.random()) * nbProducts)],
+        author: buyers[await Math.floor((await Math.random()) * nbUsers)],
+      }).fetch();
+      pdctComments.push(pdctComment.id);
+    }
+
+    var offers = [];
+    var offer;
+    var sbs;
+    // OFFERS
+    sails.log("Generating " + (nbAvgOffers * nbProducts) + " offers ...");
+    for (i = 0; i < nbAvgComments * nbProducts; i++) {
+      sbs = await Math.random() < 0.5 ? true : false;
+      offer = await Offer.create({
+        type: await Math.random() < 0.5 ? "Neuf" : "Reconditionné",
+        price: await Math.round(Math.random() * (Math.random() < 0.5 ? 10 : (Math.random() < 0.5 ? 100 : 1000)) * 100) / 100,
+        deliveryFee: sbs ? 0 : (await Math.round(Math.random() * 1500) / 100),
+        remainingStock: Math.floor(Math.random() * 100),
+        sentByShopimax: sbs,
+        seller: sellers[await Math.floor((await Math.random()) * nbSellers)],
+        product: products[await Math.floor((await Math.random()) * nbProducts)]
+      }).fetch();
+      await offers.push(offer.id);
+    }
+
+
+
+    var orders = [];
+    var order;
+    // ORDERS
 
     return exits.success();
   }
