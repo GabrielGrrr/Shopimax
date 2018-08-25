@@ -10,7 +10,7 @@
  *   https://sailsjs.com/anatomy/tasks/config/sync.js
  *
  */
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
   grunt.config.set('sync', {
     dev: {
@@ -41,8 +41,8 @@ module.exports = function(grunt) {
   // 2. Then uncomment the following code:
   //
   // ```
-  // // Load Grunt plugin from the node_modules/ folder.
-  // grunt.loadNpmTasks('grunt-sync');
+  // Load Grunt plugin from the node_modules/ folder.
+  grunt.loadNpmTasks('grunt-sync');
   // ```
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

@@ -17,6 +17,9 @@ module.exports = {
       isURL: true,
       required: true
     },
+    order: {
+      type: "number"
+    }
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝

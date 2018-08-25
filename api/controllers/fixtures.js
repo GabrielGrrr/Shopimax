@@ -1,7 +1,9 @@
 module.exports = {
   friendlyName: "Fixtures",
 
-  description: "Fixtures something.",
+  description: "FR : Générateur de données de test pour l'application.",
+  extendedDescription: "FR : Générateur de données de test pour l'application." +
+    "EN : Test fixtures generator. Does not set any fake order for now, I have no use for it.",
 
   inputs: {},
 
@@ -31,7 +33,8 @@ module.exports = {
     var nbImageMax = 6;
     var nbDetailsMax = 15;
 
-    // On bouclera là-dessus pour ajouter plus de diversité graphique. Varier les tailles tend aussi à faire varier les images selon le fournisseur.
+    // On bouclera là-dessus pour ajouter plus de diversité graphique. Varier les tailles fait aussi varier les images selon le fournisseur, 
+    // et loremflickr accepte un ?random={id} pour contourner la mise en cache du navigateur.
     var imageSuppliers = [
       "http://lorempixel.com/",
       "https://loremflickr.com/",
@@ -184,7 +187,8 @@ module.exports = {
         pdctImage = await ProductImage.create({
           url: imageSuppliers[await Math.floor((await Math.random()) * imageSuppliers.length)] + ""
             + (await Math.floor((await Math.random()) * 200) + 300)
-            + "/" + (await Math.floor((await Math.random()) * 200) + 400)
+            + "/" + (await Math.floor((await Math.random()) * 200) + 400),
+          order: y
         }).fetch();
         await pdctImages.push(pdctImage.id);
       }
@@ -192,9 +196,12 @@ module.exports = {
       product = await Product.create({
         name: await faker.commerce.productAdjective() + " " + await faker.commerce.product(),
         brand: await faker.company.companyName(),
+        viewCount: await Math.round(Math.random() * 10000),
+        saleCount: await Math.round(Math.random() * 1000),
         details: details,
         images: pdctImages,
         categories: [categories[await Math.floor((await Math.random()) * categories.length)]],
+
       }).fetch();
       await products.push(product.id);
     }
@@ -223,7 +230,7 @@ module.exports = {
       sbs = await Math.random() < 0.5 ? true : false;
       offer = await Offer.create({
         type: await Math.random() < 0.5 ? "Neuf" : "Reconditionné",
-        price: await Math.round(Math.random() * (Math.random() < 0.5 ? 10 : (Math.random() < 0.5 ? 100 : 1000)) * 100) / 100,
+        price: await Math.round(Math.random() * (Math.random() < 0.5 ? 100 : (Math.random() < 0.5 ? 20 : 1000)) * 100) / 100,
         deliveryFee: sbs ? 0 : (await Math.round(Math.random() * 1500) / 100),
         remainingStock: Math.floor(Math.random() * 100),
         sentByShopimax: sbs,

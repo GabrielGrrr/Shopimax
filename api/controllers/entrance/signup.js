@@ -364,7 +364,7 @@ Si un mail de vérification est envoyé, le compte du nouvel user est mis dans u
     }
   },
 
-  fn: async function(inputs, exits) {
+  fn: async function (inputs, exits) {
     var newEmailAddress = inputs.emailAddress.toLowerCase();
 
     var newUserAddress = await Address.create({
@@ -392,13 +392,13 @@ Si un mail de vérification est envoyé, le compte du nouvel user est mis dans u
         },
         sails.config.custom.verifyEmailAddresses
           ? {
-              emailProofToken: await sails.helpers.strings.random(
-                "url-friendly"
-              ),
-              emailProofTokenExpiresAt:
-                Date.now() + sails.config.custom.emailProofTokenTTL,
-              emailStatus: "unconfirmed"
-            }
+            emailProofToken: await sails.helpers.strings.random(
+              "url-friendly"
+            ),
+            emailProofTokenExpiresAt:
+              Date.now() + sails.config.custom.emailProofTokenTTL,
+            emailStatus: "unconfirmed"
+          }
           : {}
       )
     )

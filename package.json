@@ -12,6 +12,7 @@
     "faker": "^4.1.0",
     "sails": "^1.0.2",
     "sails-hook-apianalytics": "^2.0.0",
+    "sails-hook-autoreload": "^1.1.0",
     "sails-hook-organics": "^0.14.5",
     "sails-hook-orm": "^2.0.0-16",
     "sails-hook-sockets": "^1.4.0",
@@ -22,6 +23,7 @@
     "@sailshq/htmlhint": "^0.9.16",
     "@sailshq/lesshint": "^4.6.6",
     "grunt": "^1.0.3",
+    "grunt-sync": "0.8.0",
     "sails-hook-grunt": "^3.0.2"
   },
   "scripts": {

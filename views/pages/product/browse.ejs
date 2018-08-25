@@ -1,0 +1,45 @@
+<div id="browse">
+    <div id="carousel">
+    </div>
+    <div id="browse-page">
+        <span id="browse-menu">
+            <div id="menu-categories">
+                Afficher les résultats pour ...
+            </div>
+            <div id="menu-options">
+                Affiner la recherche par ....
+            </div>
+        </span>
+
+        <span id=browse-content>
+            <div id="results-bar">
+                <span id="results-count">Nombre de résultats pour nom de catégorie / recherche</span>
+                <span id="results-sorting-tools"> Trier par popularité / prix / note - Type de présentation (liste ou grille)</span>
+            </div>
+            <div id="product-list">
+                <% products.forEach(function(product) { %>
+                    <div class="product">
+                        <div class="product-image">
+                            <img src=" <%= product.images[0].url %>" alt="Image du produit <%= product.name %>">
+                        </div>
+                        <div class="product-name">
+                            <a href="/product/view?id=<%= product.id %>">
+                                <%= product.name %>
+                            </a>
+                        </div>
+                        <div class="product-brand"> de
+                            <%= product.brand %>
+                        </div>
+                        <div class="product-price"> EUR
+                            <%= product.offers[0].price %>
+                        </div>
+                    </div>
+                    <% }); %>
+            </div>
+            <div id="page-navigation">
+                Page précédente / suivante
+            </div>
+        </span>
+    </div>
+</div>
+<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>
