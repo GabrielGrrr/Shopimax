@@ -9,7 +9,15 @@ module.exports = {
 
 
   inputs: {
-
+    sortingCriteria: {
+      type: "string",
+      isIn: ['saleCount', 'price', 'rating'],
+      description: "Le critère de tri du résultat."
+    },
+    category: {
+      type: "string",
+      description: "L'id de la catégorie de produit que l'on souhaite parcourir."
+    }
   },
 
 
@@ -38,13 +46,13 @@ module.exports = {
   // par produit et par note, date de livraison estimée etc etc.
 
   fn: async function (inputs, exits) {
-
+    var resultsPerPage = 28;
     var sum;
     var products = new Map();
     await Product.stream({
       //where: { name: 'mary' },
       //skip: 20,
-      limit: 50,
+      limit: resultsPerPage,
       sort: 'createdAt DESC'
     }).populate('offers', {
       //where: { type: 'Neuf' },
@@ -68,6 +76,8 @@ module.exports = {
         return next();
       });
 
-    return exits.success({ products: products });
+    var nbResults = await Product.count();
+
+    return exits.success({ products: products, nbResults: nbResults, resultsPerPage: resultsPerPage });
   }
 };

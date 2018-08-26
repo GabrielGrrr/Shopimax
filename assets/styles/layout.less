@@ -3,6 +3,8 @@
 @color1: white;
 @color2: #ff3860;
 @color3: #343a40; //aussi, dark var de bootstrap
+@color4: grey;
+@star-color: #d4a31e;
 
 html,
 body {
@@ -14,6 +16,15 @@ body {
   color: @color1;
   &:hover {
     color: @color2;
+  }
+  cursor: pointer;
+}
+
+.link2 {
+  color: @color2;
+  &:hover {
+    color: @color3;
+    text-decoration:none;
   }
   cursor: pointer;
 }

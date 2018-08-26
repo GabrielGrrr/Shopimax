@@ -13,17 +13,21 @@
 
         <span id=browse-content>
             <div id="results-bar">
-                <span id="results-count">Nombre de résultats pour nom de catégorie / recherche</span>
+                <span id="results-count">1 /
+                    <%= resultsPerPage %> sur
+                        <%= nbResults %> résultats pour nom de catégorie / recherche</span>
                 <span id="results-sorting-tools"> Trier par popularité / prix / note - Type de présentation (liste ou grille)</span>
             </div>
             <div id="product-list">
                 <% products.forEach(function(product) { %>
                     <div class="product">
                         <div class="product-image">
-                            <img src=" <%= product.images[0].url %>" alt="Image du produit <%= product.name %>">
+                            <a href="/product/view?id=<%= product.id %>">
+                                <img src=" <%= product.images[0].url %>" alt="Image du produit <%= product.name %>">
+                            </a>
                         </div>
                         <div class="product-name">
-                            <a href="/product/view?id=<%= product.id %>">
+                            <a href="/product/view?id=<%= product.id %>" class="link2">
                                 <%= product.name %>
                             </a>
                         </div>
@@ -43,12 +47,15 @@
                                         <% } %>
                         </div>
                         <div class="product-rating">
-                            Note moyenne :
-                            <%= product.ratingAvg %> / 5. Pour
-                                <%= product.commentCount %> commentaires.
+                            <% for (var i = 0; i < 5; i++) { %>
+                                <i class="<%= (i < product.ratingAvg - 0.25)? (i < product.ratingAvg - 0.5)? 'fas fa-star' : 'fas fa-star-half-alt' : 'far fa-star'%>"></i>
+                                <% } %>
+                                    <a href="/product/view?id=<%= product.id %>#reviews" class="commentCount link2">
+                                        <%= product.commentCount %>
+                                    </a>
                         </div>
                         <% if (product.offers[0].sentByShopimax) { %>
-                            <div>Livraison gratuite possible.</div>
+                            <div class="freeDelivAvailable">Livraison gratuite possible.</div>
                             <% } %>
                     </div>
                     <% }); %>
