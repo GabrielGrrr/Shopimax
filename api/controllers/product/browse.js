@@ -17,6 +17,10 @@ module.exports = {
     category: {
       type: "string",
       description: "L'id de la catégorie de produit que l'on souhaite parcourir."
+    },
+    index: {
+      type: "number",
+      description: "L'index de la page que l'on souhaite consulter (de 1 à ∞)"
     }
   },
 
@@ -71,13 +75,18 @@ module.exports = {
             sum += product.comments[i].rating;
           product.ratingAvg = Math.round((sum / product.commentCount) * 10) / 10;
         }
-
         products.set(product.id, product);
         return next();
       });
 
     var nbResults = await Product.count();
-
-    return exits.success({ products: products, nbResults: nbResults, resultsPerPage: resultsPerPage });
+    return exits.success({
+      products: products, nbResults: nbResults, resultsPerPage: resultsPerPage,
+      pageNavigation: {
+        firstPage: 1,
+        currentPage: inputs.index ? inputs.index : 1,
+        lastPage: await Math.ceil(nbResults ? nbResults : 1 / resultsPerPage)
+      }
+    });
   }
 };

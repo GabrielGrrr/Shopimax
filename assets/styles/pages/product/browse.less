@@ -1,13 +1,21 @@
 #browse {
-    margin-top:59px;
+    margin-top:55px;
+    background-color:@color1;
     #browse-page {
+        display:flex;
+        justify-content: space-between;
         #browse-menu {
-            float:left;
+            height:100%;
+            flex-shrink:0;
             #menu-categories {
-                background-color:yellow;
+                padding:10px;
+                color:@color1;
+                background-color:@color3;
             }
             #menu-options {
-                background-color:pink;
+                padding:10px;
+                color:@color1;
+                background-color:@color3;
             }
         }
 
@@ -15,8 +23,12 @@
             #results-bar {
                 display:flex;
                 justify-content: space-between;
-                background-color:purple;
+                border-bottom:1px solid #313030;
+                color:@color4;
+                padding-top:10px;
+                padding-bottom: 10px;
                 #results-count {
+                    margin-left:10px;
 
                 }
                 #results-sorting-tools {
@@ -27,11 +39,14 @@
                 flex-flow: row wrap;
                 justify-content: space-around;
                 align-items: center;
+                background-color:@color3;
                 .product {
                     width:200px;
                     text-indent:3px;
                     margin-bottom:20px;
+                    padding-bottom:10px;
                     margin-top:10px;
+                    background:@color1;
                     .product-image img {
                         width:200px;
                         height:200px;
@@ -59,9 +74,17 @@
                     }
                 }
             }
-            #page-navigation{
+            .page-navigation{
                 text-align:center;
-                background-color:red;
+                a {
+                    .link2();
+                    margin:10px;
+                    font-size:1.7em;
+                }
+                #current-page {
+                    margin:10px;
+                    font-size:1.7em;
+                }
             }
         }
     }

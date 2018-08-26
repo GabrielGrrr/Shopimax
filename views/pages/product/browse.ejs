@@ -2,35 +2,32 @@
     <div id="carousel">
     </div>
     <div id="browse-page">
-        <span id="browse-menu">
+        <div id="browse-menu">
             <div id="menu-categories">
                 Afficher les résultats pour ...
             </div>
             <div id="menu-options">
                 Affiner la recherche par ....
             </div>
-        </span>
+        </div>
 
-        <span id=browse-content>
+        <div id=browse-content>
             <div id="results-bar">
-                <span id="results-count">1 /
-                    <%= resultsPerPage %> sur
+                <span id="results-count">Produits <%= (pageNavigation.currentPage * resultsPerPage) - resultsPerPage + 1 %> à <%= pageNavigation.currentPage * resultsPerPage %> sur
                         <%= nbResults %> résultats pour nom de catégorie / recherche</span>
                 <span id="results-sorting-tools"> Trier par popularité / prix / note - Type de présentation (liste ou grille)</span>
             </div>
             <div id="product-list">
                 <% products.forEach(function(product) { %>
                     <div class="product">
+                    <a href="/view/<%= product.id %>" class="link3">
                         <div class="product-image">
-                            <a href="/product/view?id=<%= product.id %>">
                                 <img src=" <%= product.images[0].url %>" alt="Image du produit <%= product.name %>">
-                            </a>
                         </div>
                         <div class="product-name">
-                            <a href="/product/view?id=<%= product.id %>" class="link2">
                                 <%= product.name %>
-                            </a>
                         </div>
+                        </a>
                         <div class="product-brand"> de
                             <%= product.brand %>
                         </div>
@@ -46,24 +43,71 @@
                                         </span>
                                         <% } %>
                         </div>
+                        <% if (product.offers[0].sentByShopimax) { %>
+                            <div class="freeDelivAvailable">Livraison gratuite possible.</div>
+                            <% } %>
                         <div class="product-rating">
                             <% for (var i = 0; i < 5; i++) { %>
                                 <i class="<%= (i < product.ratingAvg - 0.25)? (i < product.ratingAvg - 0.5)? 'fas fa-star' : 'fas fa-star-half-alt' : 'far fa-star'%>"></i>
                                 <% } %>
-                                    <a href="/product/view?id=<%= product.id %>#reviews" class="commentCount link2">
+                                    <a href="/view/<%= product.id %>#reviews" class="commentCount link2">
                                         <%= product.commentCount %>
                                     </a>
                         </div>
-                        <% if (product.offers[0].sentByShopimax) { %>
-                            <div class="freeDelivAvailable">Livraison gratuite possible.</div>
-                            <% } %>
                     </div>
                     <% }); %>
             </div>
-            <div id="page-navigation">
-                Page précédente / suivante
+
+            <div class="page-navigation">
+                <% if (pageNavigation.lastPage < 12) { %>
+                    <% for (var i = pageNavigation.firstPage; i < pageNavigation.lastPage; i++) { %>
+                        <% if (pageNavigation.currentPage==i) { %>
+                            <span id="current-page">
+                                <%= i %>
+                            </span>
+                        <% } else { %>
+                            <a href="/browse/<%= i %>">
+                                <%= i %>
+                            </a>
+                        <% } %>
+                    <% } %>
+                <% } else { %>
+                    <% for (var i = pageNavigation.firstPage; i <= Math.min(3, Math.max(pageNavigation.currentPage - 4, 3)); i++) { %>
+                        <% if (pageNavigation.currentPage == i) { %>
+                            <span id="current-page">
+                                <%= i %>
+                            </span>
+                        <% } else { %>
+                            <a href="/browse/<%= i %>">
+                                <%= i %>
+                            </a>
+                        <% } %> 
+                    <% } %> 
+                    <% if (pageNavigation.currentPage > 7) { %>
+                        <span class> ... </span>
+                    <% } %>
+                    <% for (var j = Math.max(4, pageNavigation.currentPage - 3); j < Math.min(pageNavigation.lastPage, pageNavigation.currentPage + 3); j++) { %>
+                        <% if (pageNavigation.currentPage == j) { %>
+                            <span id="current-page">
+                                <%= j %>
+                            </span>
+                        <% } else { %>
+                            <a href="/browse/<%= j %>">
+                                <%= j %>
+                            </a>
+                        <% } %>
+                    <% } %>
+                    <% if (pageNavigation.lastPage > (pageNavigation.currentPage +3)) { %>
+                        <span class="end-page"> ... 
+                            <a class="last-page" href="/browse/<%= pageNavigation.lastPage %>">
+                                <%= pageNavigation.lastPage %>
+                            </a>
+                        </span>
+                    <% } %>
+                <% } %>
             </div>
-        </span>
+
+        </div>
     </div>
 </div>
-<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>
+    <%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

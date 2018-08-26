@@ -1,6 +1,6 @@
 @footer-height: 40px;
 @container-md-max-width: 1100px;
-@color1: white;
+@color1: rgb(253, 236, 229);
 @color2: #ff3860;
 @color3: #343a40; //aussi, dark var de bootstrap
 @color4: grey;
@@ -25,6 +25,21 @@ body {
   &:hover {
     color: @color3;
     text-decoration:none;
+  }
+  cursor: pointer;
+}
+
+.link3 {
+  color: @color3;
+  text-shadow: 2px 8px 6px rgba(0,0,0,0.2),
+  0px -5px 35px rgba(255,255,255,0.3);
+
+  &:hover {
+    color: @color2;
+    text-decoration:none;
+    text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
+             0px 8px 13px rgba(0,0,0,0.1),
+             0px 18px 23px rgba(0,0,0,0.1);
   }
   cursor: pointer;
 }
