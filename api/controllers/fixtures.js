@@ -230,7 +230,7 @@ module.exports = {
       sbs = await Math.random() < 0.5 ? true : false;
       offer = await Offer.create({
         type: await Math.random() < 0.5 ? "Neuf" : "Reconditionné",
-        price: await Math.round(Math.random() * (Math.random() < 0.5 ? 100 : (Math.random() < 0.5 ? 20 : 1000)) * 100) / 100,
+        price: await Math.round(Math.random() * (Math.random() < 0.5 ? 10000 : (Math.random() < 0.5 ? 200 : 1000)) * 100) / 100,
         deliveryFee: sbs ? 0 : (await Math.round(Math.random() * 1500) / 100),
         remainingStock: Math.floor(Math.random() * 100),
         sentByShopimax: sbs,
