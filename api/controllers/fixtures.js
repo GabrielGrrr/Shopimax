@@ -36,7 +36,6 @@ module.exports = {
     // On bouclera là-dessus pour ajouter plus de diversité graphique. Varier les tailles fait aussi varier les images selon le fournisseur, 
     // et loremflickr accepte un ?random={id} pour contourner la mise en cache du navigateur.
     var imageSuppliers = [
-      "http://lorempixel.com/",
       "https://loremflickr.com/",
       "http://placekitten.com/",
       "https://picsum.photos/"
@@ -77,19 +76,20 @@ module.exports = {
 
 
     var buyers = [];
-    var buyer;
+    var buyer; var name;
     // ACHETEURS
     sails.log("Generating " + nbUsers + " users ...");
     for (i = 0; i < nbUsers; i++) {
+      name = await faker.name.findName();
       buyer = await User.create({
-        emailAddress: await faker.internet.email(),
+        emailAddress: await name.replace(/\s+/g, '-') + i + "@example.com",
         //On ne hache plus le password pour les fixtures, l'opération est bien trop longue sur de gros effectifs, 
         //et c'est inutile (sauf si on veut se logger avec un des comptes)
         /*password: await sails.helpers.passwords.hashPassword(
           faker.internet.password()
         ),*/
         password: await faker.internet.password(),
-        fullName: await faker.name.findName(),
+        fullName: name,
         tosAcceptedByIp: await faker.internet.ip(),
         address: addresses[i]
       }).fetch();
@@ -214,7 +214,7 @@ module.exports = {
     for (i = 0; i < nbAvgComments * nbProducts; i++) {
       pdctComment = await ProductComment.create({
         content: await faker.lorem.paragraphs(),
-        rating: await Math.floor(((await Math.random()) * 5) + 1),
+        rating: await Math.round(((await Math.random()) * 3) + 2),
         product: products[await Math.floor((await Math.random()) * nbProducts)],
         author: buyers[await Math.floor((await Math.random()) * nbUsers)],
       }).fetch();

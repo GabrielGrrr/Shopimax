@@ -32,7 +32,24 @@
                         </div>
                         <div class="product-price"> EUR
                             <%= product.offers[0].price %>
+                                <% if(product.offers[0].sentByShopimax) { %>
+                                    <span class="sbs">
+                                        <img src="/images/sbs.png" alt="Envoyé par shopimax">
+                                    </span>
+                                    <% } else { %>
+                                        <span class="deliveryFee"> + EUR
+                                            <%= product.offers[0].deliveryFee %> Livraison
+                                        </span>
+                                        <% } %>
                         </div>
+                        <div class="product-rating">
+                            Note moyenne :
+                            <%= product.ratingAvg %> / 5. Pour
+                                <%= product.commentCount %> commentaires.
+                        </div>
+                        <% if (product.offers[0].sentByShopimax) { %>
+                            <div>Livraison gratuite possible.</div>
+                            <% } %>
                     </div>
                     <% }); %>
             </div>
