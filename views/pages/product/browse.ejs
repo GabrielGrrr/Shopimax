@@ -100,7 +100,7 @@
                                 <%= i %>
                             </span>
                             <% } else { %>
-                                <a href="/browse/<%= i %>">
+                                <a href="/browse/<%= i %>/<%= category.id %>">
                                     <%= i %>
                                 </a>
                                 <% } %>
@@ -112,7 +112,7 @@
                                                         <%= i %>
                                                     </span>
                                                     <% } else { %>
-                                                        <a href="/browse/<%= i %>">
+                                                        <a href="/browse/<%= i %>/<%= category.id %>">
                                                             <%= i %>
                                                         </a>
                                                         <% } %>
@@ -126,14 +126,14 @@
                                                                                     <%= j %>
                                                                                 </span>
                                                                                 <% } else { %>
-                                                                                    <a href="/browse/<%= j %>">
+                                                                                    <a href="/browse/<%= j %>/<%= category.id %>">
                                                                                         <%= j %>
                                                                                     </a>
                                                                                     <% } %>
                                                                                         <% } %>
                                                                                             <% if (pageNavigation.lastPage > (pageNavigation.currentPage +3)) { %>
                                                                                                 <span class="end-page"> ...
-                                                                                                    <a class="last-page" href="/browse/<%= pageNavigation.lastPage %>">
+                                                                                                    <a class="last-page" href="/browse/<%= pageNavigation.lastPage %>/<%= category.id %>">
                                                                                                         <%= pageNavigation.lastPage %>
                                                                                                     </a>
                                                                                                 </span>

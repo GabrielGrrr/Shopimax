@@ -57,8 +57,30 @@ module.exports = {
         .populate('children')
         .populate('parent');
       var categoryRank = category.rank;
-      var nbResults = await Product.count({ where: { category: categoryId } });
-      sails.log("PDCT COUNT : " + nbResults);
+
+      var nbResults = 0;
+      if (typeof category.children !== 'undefined') {
+        async function updateCount(catObj) {
+          nbResults += await Product.count({ where: { category: catObj.id } });
+
+          if (typeof catObj.children !== 'undefined') {
+            for (let i = 0; i < catObj.children.length; i++) {
+              let child = await ProductCategory.findOne({ where: { id: catObj.children[i].id } }).populate('children');
+              await updateCount(child);
+            };
+          };
+        };
+        await updateCount(category);
+      };
+      /*if (typeof category.parent !== 'undefined') {
+        parent = await ProductCategory.findOne({ where: { id: category.parent } });
+        while (parent.rank > 0) {
+          nbResults += await Product.count({ where: { category: parent.id } });
+          parent = await ProductCategory.findOne({ where: { id: parent.parent } });
+        }
+      }*/
+
+      //var nbResults = await Product.count({ where: { category: categoryId } });
     }
     else {
       var category = await ProductCategory.findOne({ where: { rank: 0 } })

@@ -89,7 +89,7 @@ module.exports = {
     await pdctCategories.push(pdctCategorie.id);
 
     await ProductCategory.addToCollection(Parent.id, 'children', pdctCategories);
-    var index = pdctCategories.length - 1;
+    var index = pdctCategories.length;
 
 
 
@@ -129,7 +129,7 @@ module.exports = {
     await pdctCategories.push(pdctCategorie.id);
 
     await ProductCategory.addToCollection(Parent.id, "children", pdctCategories.slice(index));
-    index = pdctCategories.length - 1;
+    var index = pdctCategories.length;
 
 
 
@@ -177,7 +177,7 @@ module.exports = {
 
 
     await ProductCategory.addToCollection(Parent.id, "children", pdctCategories.slice(index));
-    index = pdctCategories.length - 1;
+    var index = pdctCategories.length;
 
 
     Parent = await ProductCategory.create({
@@ -223,7 +223,7 @@ module.exports = {
     await pdctCategories.push(pdctCategorie.id);
 
     await ProductCategory.addToCollection(Parent.id, "children", pdctCategories.slice(index));
-    index = pdctCategories.length - 1;
+    var index = pdctCategories.length;
 
 
     Parent = await ProductCategory.create({
@@ -262,7 +262,7 @@ module.exports = {
 
 
     await ProductCategory.addToCollection(Parent.id, "children", pdctCategories.slice(index));
-    index = pdctCategories.length - 1;
+    var index = pdctCategories.length;
 
 
     Parent = await ProductCategory.create({
@@ -318,7 +318,7 @@ module.exports = {
 
 
     await ProductCategory.addToCollection(Parent.id, "children", pdctCategories.slice(index));
-    index = pdctCategories.length - 1;
+    var index = pdctCategories.length;
 
     Parent = await ProductCategory.create({
       name: "enfance",
@@ -340,7 +340,7 @@ module.exports = {
 
 
     await ProductCategory.addToCollection(Parent.id, "children", pdctCategories.slice(index));
-    index = pdctCategories.length - 1;
+    var index = pdctCategories.length;
 
 
     Parent = await ProductCategory.create({
@@ -396,7 +396,7 @@ module.exports = {
 
 
     await ProductCategory.addToCollection(Parent.id, "children", pdctCategories.slice(index));
-    index = pdctCategories.length - 1;
+    var index = pdctCategories.length;
 
 
     Parent = await ProductCategory.create({
@@ -435,7 +435,7 @@ module.exports = {
 
 
     await ProductCategory.addToCollection(Parent.id, "children", pdctCategories.slice(index));
-    index = pdctCategories.length - 1;
+    var index = pdctCategories.length;
 
     Parent = await ProductCategory.create({
       name: "auto",
