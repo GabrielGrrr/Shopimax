@@ -6,12 +6,12 @@
       <ajax-form action="login" :syncing.sync="syncing" :cloud-error.sync="cloudError" :form-data="formData" :form-rules="formRules"
         :form-errors.sync="formErrors" @submitted="submittedForm()">
         <div class="form-group">
-          <input type="email" class="form-control" placeholder="Email Address" :class="[formErrors.emailAddress ? 'is-invalid' : '']"
+          <input type="email" class="form-control" placeholder="Adresse e-mail" :class="[formErrors.emailAddress ? 'is-invalid' : '']"
             v-model.trim="formData.emailAddress" autocomplete="email" focus-first>
           <div class="invalid-feedback" v-if="formErrors.emailAddress">Veuillez entrer une adresse e-mail valide.</div>
         </div>
         <div class="form-group">
-          <input type="password" class="form-control" placeholder="Password" :class="[formErrors.password ? 'is-invalid' : '']" v-model.trim="formData.password"
+          <input type="password" class="form-control" placeholder="Mot de passe" :class="[formErrors.password ? 'is-invalid' : '']" v-model.trim="formData.password"
             autocomplete="current-password">
           <div class="invalid-feedback" v-if="formErrors.password">Veuillez entrer un mot de passe</div>
         </div>
@@ -28,7 +28,7 @@
             si le problème persiste.</small>
         </p>
         <div class="form-group">
-          <ajax-button :syncing="syncing" class="btn-dark btn-lg btn-block">Sign in</ajax-button>
+          <ajax-button :syncing="syncing" class="btn-dark btn-lg btn-block">Connexion</ajax-button>
         </div>
       </ajax-form>
       <p class="text-center">

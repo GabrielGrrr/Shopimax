@@ -52,14 +52,14 @@ module.exports = {
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
     parent: {
-      collection: "productcategory",
+      model: "productcategory",
     },
     children: {
       collection: "productcategory",
     },
     products: {
       collection: "product",
-      via: "categories"
+      via: "category"
     }
   }
 };

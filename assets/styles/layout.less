@@ -19,6 +19,9 @@ body {
   }
   cursor: pointer;
 }
+h1 {
+  color:@color2;
+}
 
 .link2 {
   color: @color3;
@@ -75,6 +78,15 @@ body {
   cursor: pointer;
 }
 
+.btn {
+  color:white;
+  background-color: @color3;
+  &:hover {
+    color: @color2;
+  }
+  cursor: pointer;
+}
+
 .btn1 {
   color: @color2;
   background-color: @color1;
@@ -90,7 +102,7 @@ body {
   position:absolute;
   width:100%;
   padding-bottom: @footer-height;
-
+  background-color:@color1;
   header {
     position: fixed;
     width: 100%;

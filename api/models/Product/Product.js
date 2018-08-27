@@ -65,9 +65,8 @@ module.exports = {
       collection: "offer",
       via: "product"
     },
-    categories: {
-      collection: "ProductCategory",
-      via: "products"
+    category: {
+      model: "ProductCategory",
     },
     variations: {
       collection: "productvariation",

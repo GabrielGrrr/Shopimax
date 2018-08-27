@@ -36,9 +36,9 @@ module.exports = {
     // On bouclera là-dessus pour ajouter plus de diversité graphique. Varier les tailles fait aussi varier les images selon le fournisseur, 
     // et loremflickr accepte un ?random={id} pour contourner la mise en cache du navigateur.
     var imageSuppliers = [
-      "https://loremflickr.com/",
-      "http://placekitten.com/",
-      "https://picsum.photos/"
+      //"https://loremflickr.com/",
+      "http://placekitten.com/"
+      // "https://picsum.photos/"
     ];
 
     sails.log(
@@ -177,7 +177,8 @@ module.exports = {
       randNbDetails = await Math.ceil(await Math.random() * nbDetailsMax) + 1;
       details = "{ ";
       for (x = 0; x < randNbDetails + 1; x++) {
-        details += '"' + await faker.lorem.word() + '" : "' + await faker.lorem.sentence() + '" , ';
+        details += '"' + await faker.lorem.word() + '" : "' + await faker.lorem.sentence() + '"';
+        if (x < randNbDetails) details += ', ';
       }
       details += " }";
 
@@ -200,9 +201,9 @@ module.exports = {
         brand: await faker.company.companyName(),
         viewCount: await Math.round(Math.random() * 10000),
         saleCount: await Math.round(Math.random() * 1000),
-        details: details,
+        details: JSON.parse(details),
         images: pdctImages,
-        categories: [category],
+        category: category,
       }).fetch();
       // On garde les ids de produits de côté pour pouvoir créer des offres et notations users qui y correspondent
       await products.push(product.id);
@@ -212,7 +213,7 @@ module.exports = {
     }
 
     //On ajoute les différents ids de produits aux collections associatives idoines de leurs catégories respectives
-    for (catId in categoryDict) {
+    for (var catId in categoryDict) {
       await ProductCategory.addToCollection(catId, "products", categoryDict[catId]);
     }
 

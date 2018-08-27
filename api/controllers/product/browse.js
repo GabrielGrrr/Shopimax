@@ -49,34 +49,32 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     var resultsPerPage = 28;
-    var sum;
-    var i;
-    var parent;
-    var products = new Map();
     var index = (typeof inputs.index == 'undefined') ? 1 : inputs.index;
 
     if (typeof inputs.categoryId !== 'undefined') {
+      var categoryId = inputs.categoryId;
       var category = await ProductCategory.findOne({ where: { id: categoryId } })
         .populate('children')
-        .populate('products');
+        .populate('parent');
       var categoryRank = category.rank;
-      var categoryId = inputs.categoryId;
-      var nbResults = category.products.length;
+      var nbResults = await Product.count({ where: { category: categoryId } });
+      sails.log("PDCT COUNT : " + nbResults);
     }
     else {
       var category = await ProductCategory.findOne({ where: { rank: 0 } })
-        .populate('children');
+        .populate('children').populate('parent');
       var categoryId = category.id;
       var categoryRank = 0;
       var nbResults = await Product.count();
     }
 
-
+    var parent;
+    var products = new Map();
+    var productCount = 0;
     // Stream applique une fonction à chaque entrée retournée de la requête. C'est, donc une grosse boucle.
     await Product.stream({
       //where: { name: 'mary' },
-      skip: index * resultsPerPage,
-      limit: resultsPerPage,
+      skip: (index - 1) * resultsPerPage,
       sort: 'createdAt DESC'
     }).populate('offers', {
       limit: 1,
@@ -85,44 +83,53 @@ module.exports = {
       limit: 1,
       sort: 'order ASC'
     }).populate('comments')
-      .populate('categories')
+      .populate('category')
       .eachRecord(async (product, next) => {
-        sum = 0;
+        if (productCount == resultsPerPage)
+          return exits.success({
+            products: products,
+            nbResults: nbResults,
+            resultsPerPage: resultsPerPage,
+            category: category,
+            pageNavigation: {
+              firstPage: 1,
+              currentPage: index,
+              lastPage: await Math.ceil((typeof nbResults !== 'undefined' ? nbResults : 1) / resultsPerPage),
+            }
+          })
+
         product.commentCount = product.comments.length;
         if (product.commentCount) {
-          for (i = 0; i < product.commentCount; i++)
+          let sum = 0;
+          for (let i = 0; i < product.commentCount; i++)
             sum += product.comments[i].rating;
           product.ratingAvg = await Math.round((sum / product.commentCount) * 10) / 10;
         }
-
-        await products.set(product.id, product);
-        sails.log("PRODUCT CATEGORIES : " + product.categories[0].id + " PARENT : " + product.categories[0].parent);
         // Pour chaque catégorie à laquelle appartient le produit, on vérifie si elle correspond à la catégorie fournie en paramètre
         // Si c'est le cas, on le persiste dans les résultats
-        for (i = 0; i < product.categories.length; i++) {
-          if (product.categories[i].id == categoryId) {
-            await products.set(product.id, product);
-            break;
-          }
-          // On cherche aussi une correspondance avec une catégorie parente de la catégorie du produit
-          else if (product.categories[i].parent == categoryId) {
-            await products.set(product.id, product);
-            break;
-          }
-          // Et les parents du parent
-          else if (product.categories[i].rank - 1 > categoryRank) {
-            parent = await ProductCategory.find({ where: { id: product.categories[i].parent } }).limit(1); //findOne refuses to take the criteria into account ...
-            sails.log("PARENT :" + parent[0] + " RANK : " + parent[0].rank + " PARENTPARENT :" + parent[0].parent
-              + " CATID : " + categoryId + " ID PARENT FROM PDCT : " + product.categories[i].parent);
-            while (parent[0].rank > categoryRank) {
-              sails.log("PARENT :" + parent[0] + " RANK : " + parent[0].rank + " PARENTPARENT :" + parent[0].parent
-                + " CATID : " + categoryId + " ID PARENT FROM PDCT : " + product.categories[i].parent);
-              if (parent[0].parent == categoryId) {
-                await products.set(product.id, product);
-                break;
-              }
-              parent = await ProductCategory.find({ where: { id: parent[0].parent } }).limit(1);
+
+        if (product.category.id == categoryId) {
+          await products.set(product.id, product);
+          productCount++;
+          return next();
+        }
+        // On cherche aussi une correspondance avec une catégorie parente de la catégorie du produit
+        else if (product.category.parent == categoryId) {
+          await products.set(product.id, product);
+          productCount++;
+          return next();
+        }
+        // Et les parents du parent
+        else if (product.category.rank - 1 > categoryRank) {
+          parent = await ProductCategory.findOne({ where: { id: product.category.parent } });
+
+          while (parent.rank > categoryRank) {
+            if (parent.parent == categoryId) {
+              await products.set(product.id, product);
+              productCount++;
+              return next();
             }
+            parent = await ProductCategory.findOne({ where: { id: parent.parent } });
           }
         }
         return next();

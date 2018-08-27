@@ -35,20 +35,27 @@
             <%= product.offers[0].remainingStock %> produits restants en stock.
         </div>
         <div id="product-delivery">
-            Faites-vous livrer entre le 28 et le 30 août en choisissant la Livraison Prioritaire lors du passage de commande. En savoir
-            plus.
+            Faites-vous livrer entre le ?? et le ?? ?? en choisissant la Livraison Prioritaire lors du passage de commande.
         </div>
         <div id="product-sender-seller">
-            Expédié et vendu par IGLM ELECTRONIC.
+            Expédié et vendu par ??.
         </div>
         <div id="product-alt-offers">
-            17 neufs à partir de EUR 569,00 2 d'occasion à partir de EUR 539,69
+            ?? neufs à partir de EUR ?? et ?? d'occasion à partir de EUR ??
         </div>
         <div id="product-variations">
-            Style: DMC-FZ1000
+            Style: ??
         </div>
         <div id="product-details">
-            <%= product.details %>
+            <h2>Descriptif technique :</h2>
+            <ul>
+                <% for(let entry in product.details) { %>
+                    <li>
+                        <%= entry %> :
+                            <%= product.details[entry] %>
+                    </li>
+                    <% } %>
+            </ul>
         </div>
     </span>
     <span id="product-sell-frame">
@@ -74,7 +81,7 @@
         <div id="list-offers">
             <h1 id="list-offers-title"></h1>
             <div class="offer">
-                UNE OFFRE ALTERNATIVE
+                ICI, OFFRES ALTERNATIVES
             </div>
         </div>
     </span>

@@ -36,7 +36,7 @@ module.exports = {
     }).populate('images', {
       sort: 'order ASC'
     }).populate('comments')
-      .populate('categories');
+      .populate('category');
 
     var sum = 0;
     product.commentCount = product.comments.length;

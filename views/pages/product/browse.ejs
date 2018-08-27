@@ -5,12 +5,31 @@
         <div id="browse-menu">
             <div id="menu-categories">
                 <h2>Catégories : </h2>
-                <h3><%= category.friendlyName %></h3>
+                <% if(!category.parent){ %>
                 <ul>
+                <h3>
+                    <%= category.friendlyName %>
+                </h3>
+                <% } else { %>
+                <ul>
+                <h4>
+                    <a href="/browse/1/<%= category.parent.id %>" class="link2"><%= category.parent.friendlyName %></a>
+                </h4>
+                <ul>
+                    <h3>
+                        <%= category.friendlyName %>
+                    </h3>
+                </ul>
+                <% } %>
+                    <% if(category.children){ %>
                     <% category.children.forEach(function(children) { %>
-                        <li><a href="/browse/<%= children.id %>" alt=""><%= children.name %></a></li>
-                    <% }); %>
-                    
+                        <li>
+                            <a href="/browse/1/<%= children.id %>" alt="" class="link3">
+                                <%= children.friendlyName %>
+                            </a>
+                        </li>
+                        <% }); %>
+                    <% } %>
                 </ul>
             </div>
             <div id="menu-options">
@@ -22,8 +41,13 @@
             <div id="results-bar">
                 <span id="results-count">Produits
                     <%= (pageNavigation.currentPage * resultsPerPage) - resultsPerPage + 1 %> à
-                        <%= pageNavigation.currentPage * resultsPerPage %> sur
-                            <%= nbResults %> résultats pour <%= category.name %> / recherche</span>
+                        <% if((pageNavigation.currentPage * resultsPerPage) < nbResults) { %>
+                            <%= pageNavigation.currentPage * resultsPerPage %> sur
+                        <% } else { %>
+                        <%= nbResults %> sur
+                        <% } %>
+                                    <%= nbResults %> résultats pour
+                                        <%= category.name %> / recherche</span>
                 <span id="results-sorting-tools"> Trier par popularité / prix / note - Type de présentation (liste ou grille)</span>
             </div>
             <div id="product-list">
@@ -56,6 +80,7 @@
                             <div class="freeDelivAvailable">Livraison gratuite possible.</div>
                             <% } %>
                                 <div class="product-rating">
+                                <%= product.ratingAvg %>
                                     <% for (var i = 0; i < 5; i++) { %>
                                         <i class="<%= (i < product.ratingAvg - 0.25)? (i < product.ratingAvg - 0.5)? 'fas fa-star' : 'fas fa-star-half-alt' : 'far fa-star'%>"></i>
                                         <% } %>
@@ -95,7 +120,7 @@
                                                                 <% if (pageNavigation.currentPage > 7) { %>
                                                                     <span class> ... </span>
                                                                     <% } %>
-                                                                        <% for (var j = Math.max(4, pageNavigation.currentPage - 3); j < Math.min(pageNavigation.lastPage, pageNavigation.currentPage + 3); j++) { %>
+                                                                        <% for (var j = Math.max(4, pageNavigation.currentPage - 3); j <= Math.min(pageNavigation.lastPage, pageNavigation.currentPage + 3); j++) { %>
                                                                             <% if (pageNavigation.currentPage == j) { %>
                                                                                 <span id="current-page">
                                                                                     <%= j %>
@@ -108,8 +133,8 @@
                                                                                         <% } %>
                                                                                             <% if (pageNavigation.lastPage > (pageNavigation.currentPage +3)) { %>
                                                                                                 <span class="end-page"> ...
-                                                                                                    <a class="last-page" href="/browse/<%= pageNavigation.lastPage - 1 %>">
-                                                                                                        <%= pageNavigation.lastPage - 1 %>
+                                                                                                    <a class="last-page" href="/browse/<%= pageNavigation.lastPage %>">
+                                                                                                        <%= pageNavigation.lastPage %>
                                                                                                     </a>
                                                                                                 </span>
                                                                                                 <% } %>

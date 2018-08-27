@@ -38,6 +38,7 @@ module.exports = {
       parent: Root.id,
       children: []
     }).fetch();
+    await ProductCategory.addToCollection(Root.id, 'children', [Parent.id]);
 
     pdctCategorie = await ProductCategory.create({
       name: "shoe",
@@ -101,6 +102,7 @@ module.exports = {
       parent: Root.id,
       children: []
     }).fetch();
+    await ProductCategory.addToCollection(Root.id, 'children', [Parent.id]);
 
     pdctCategorie = await ProductCategory.create({
       name: "books",
@@ -139,6 +141,7 @@ module.exports = {
       parent: Root.id,
       children: []
     }).fetch();
+    await ProductCategory.addToCollection(Root.id, 'children', [Parent.id]);
 
     pdctCategorie = await ProductCategory.create({
       name: "cds",
@@ -185,6 +188,7 @@ module.exports = {
       parent: Root.id,
       children: []
     }).fetch();
+    await ProductCategory.addToCollection(Root.id, 'children', [Parent.id]);
 
     pdctCategorie = await ProductCategory.create({
       name: "phones",
@@ -230,6 +234,7 @@ module.exports = {
       parent: Root.id,
       children: []
     }).fetch();
+    await ProductCategory.addToCollection(Root.id, 'children', [Parent.id]);
 
     pdctCategorie = await ProductCategory.create({
       name: "playstation",
@@ -268,6 +273,7 @@ module.exports = {
       parent: Root.id,
       children: []
     }).fetch();
+    await ProductCategory.addToCollection(Root.id, 'children', [Parent.id]);
 
     pdctCategorie = await ProductCategory.create({
       name: "meubles",
@@ -322,6 +328,7 @@ module.exports = {
       parent: Root.id,
       children: []
     }).fetch();
+    await ProductCategory.addToCollection(Root.id, 'children', [Parent.id]);
 
     pdctCategorie = await ProductCategory.create({
       name: "toys",
@@ -344,6 +351,7 @@ module.exports = {
       parent: Root.id,
       children: []
     }).fetch();
+    await ProductCategory.addToCollection(Root.id, 'children', [Parent.id]);
 
     pdctCategorie = await ProductCategory.create({
       name: "men_beauty",
@@ -399,6 +407,7 @@ module.exports = {
       parent: Root.id,
       children: []
     }).fetch();
+    await ProductCategory.addToCollection(Root.id, 'children', [Parent.id]);
 
     pdctCategorie = await ProductCategory.create({
       name: "football",
@@ -436,6 +445,7 @@ module.exports = {
       parent: Root.id,
       children: []
     }).fetch();
+    await ProductCategory.addToCollection(Root.id, 'children', [Parent.id]);
 
     pdctCategorie = await ProductCategory.create({
       name: "car",
