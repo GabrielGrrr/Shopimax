@@ -18,7 +18,8 @@ module.exports.routes = {
   "GET /fixtures": { action: "fixtures" },
   "GET /browse": { action: "product/browse" },
   "GET /browse/:index?": { action: "product/browse" },
-  "GET /view/:productId?": { action: "product/view" },
+  "GET /browse/:index?/:categoryId?": { action: "product/browse" },
+  "GET /show/:productId?": { action: "product/show" },
 
   "GET /faq": { view: "pages/faq" },
   "GET /legal/terms": { view: "pages/legal/terms" },

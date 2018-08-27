@@ -35,7 +35,7 @@ module.exports = {
       friendlyName: "Vêtements, Chaussures, Bijoux",
       img: '<i class="fas fa - tshirt"></i>',
       rank: 1,
-      parents: [Root.id],
+      parent: Root.id,
       children: []
     }).fetch();
 
@@ -43,7 +43,7 @@ module.exports = {
       name: "shoe",
       friendlyName: "Chaussures",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -51,7 +51,7 @@ module.exports = {
       name: "watch",
       friendlyName: "Montres",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -59,7 +59,7 @@ module.exports = {
       name: "handbag",
       friendlyName: "Sacs à main",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -67,7 +67,7 @@ module.exports = {
       name: "men_mode",
       friendlyName: "Homme",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -75,7 +75,7 @@ module.exports = {
       name: "women_mode",
       friendlyName: "Femme",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -83,7 +83,7 @@ module.exports = {
       name: "children_mode",
       friendlyName: "Enfant",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -98,7 +98,7 @@ module.exports = {
       friendlyName: "Livres, e-book, livres audios",
       img: '<i class="fas fa-book"></i>',
       rank: 1,
-      parents: [Root.id],
+      parent: Root.id,
       children: []
     }).fetch();
 
@@ -106,7 +106,7 @@ module.exports = {
       name: "books",
       friendlyName: "Livres",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -114,7 +114,7 @@ module.exports = {
       name: "ebooks",
       friendlyName: "E-books",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -122,7 +122,7 @@ module.exports = {
       name: "audiobooks",
       friendlyName: "Livres audios",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -136,7 +136,7 @@ module.exports = {
       friendlyName: "Musique, DVD, Blu-Rays",
       img: '<i class="fas fa-compact-disk"></i>',
       rank: 1,
-      parents: [Root.id],
+      parent: Root.id,
       children: []
     }).fetch();
 
@@ -144,7 +144,7 @@ module.exports = {
       name: "cds",
       friendlyName: "CD & Vinyles",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -152,7 +152,7 @@ module.exports = {
       name: "dvds",
       friendlyName: "DVD & Blu-Ray",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -160,7 +160,7 @@ module.exports = {
       name: "series",
       friendlyName: "Séries Télévisées",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -168,7 +168,7 @@ module.exports = {
       name: "instruments",
       friendlyName: "Instruments de musique & Sono",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -182,7 +182,7 @@ module.exports = {
       friendlyName: "High-Tech, Informatique, Bureau",
       img: '<i class="fas fa-desktop"></i>',
       rank: 1,
-      parents: [Root.id],
+      parent: Root.id,
       children: []
     }).fetch();
 
@@ -190,7 +190,7 @@ module.exports = {
       name: "phones",
       friendlyName: "Smartphones",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -198,7 +198,7 @@ module.exports = {
       name: "pcs",
       friendlyName: "Ordinateurs et composants",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -206,7 +206,7 @@ module.exports = {
       name: "tvs",
       friendlyName: "Télévision & Home cinéma",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -214,7 +214,7 @@ module.exports = {
       name: "photo",
       friendlyName: "Photo et caméscopes",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -227,7 +227,7 @@ module.exports = {
       friendlyName: "Jeux vidéo et Consoles",
       img: '<i class="fas fa-gamepad"></i>',
       rank: 1,
-      parents: [Root.id],
+      parent: Root.id,
       children: []
     }).fetch();
 
@@ -235,7 +235,7 @@ module.exports = {
       name: "playstation",
       friendlyName: "PS4",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -243,7 +243,7 @@ module.exports = {
       name: "xbox",
       friendlyName: "Xbox One",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -251,7 +251,7 @@ module.exports = {
       name: "nintendo",
       friendlyName: "Nintendo Touch",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -265,7 +265,7 @@ module.exports = {
       friendlyName: "Maison, Bricolage, Animalerie",
       img: '<i class="fas fa-home"></i>',
       rank: 1,
-      parents: [Root.id],
+      parent: Root.id,
       children: []
     }).fetch();
 
@@ -273,7 +273,7 @@ module.exports = {
       name: "meubles",
       friendlyName: "Meubles",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -281,7 +281,7 @@ module.exports = {
       name: "literie",
       friendlyName: "Literie",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -289,7 +289,7 @@ module.exports = {
       name: "linge",
       friendlyName: "Linge de Maison",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -297,7 +297,7 @@ module.exports = {
       name: "tools",
       friendlyName: "Outillage",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -306,7 +306,7 @@ module.exports = {
       name: "emenager",
       friendlyName: "Électro-ménager",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -319,7 +319,7 @@ module.exports = {
       friendlyName: "Jouets, Enfants et Bébés",
       img: '<i class="fas fa-child"></i>',
       rank: 1,
-      parents: [Root.id],
+      parent: Root.id,
       children: []
     }).fetch();
 
@@ -327,7 +327,7 @@ module.exports = {
       name: "toys",
       friendlyName: "Jeux et jouets",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -341,7 +341,7 @@ module.exports = {
       friendlyName: "Beauté, Santé, Épicerie",
       img: '<i class="fas fa-heart"></i>',
       rank: 1,
-      parents: [Root.id],
+      parent: Root.id,
       children: []
     }).fetch();
 
@@ -349,7 +349,7 @@ module.exports = {
       name: "men_beauty",
       friendlyName: "Univers Homme",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -357,7 +357,7 @@ module.exports = {
       name: "parfums",
       friendlyName: "Parfums",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -365,7 +365,7 @@ module.exports = {
       name: "coiffure",
       friendlyName: "Coiffure",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -373,7 +373,7 @@ module.exports = {
       name: "maquillage",
       friendlyName: "Maquillage",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -381,7 +381,7 @@ module.exports = {
       name: "hygiene",
       friendlyName: "Hygiène et Santé",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -396,7 +396,7 @@ module.exports = {
       friendlyName: "Sports et Loisirs",
       img: '<i class="fas fa-futbol"></i>',
       rank: 1,
-      parents: [Root.id],
+      parent: Root.id,
       children: []
     }).fetch();
 
@@ -404,7 +404,7 @@ module.exports = {
       name: "football",
       friendlyName: "Football",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -412,7 +412,7 @@ module.exports = {
       name: "fitness",
       friendlyName: "Fitness",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -420,7 +420,7 @@ module.exports = {
       name: "running",
       friendlyName: "Running",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -433,7 +433,7 @@ module.exports = {
       friendlyName: "Auto et Moto",
       img: '<i class="fas fa-car"></i>',
       rank: 1,
-      parents: [Root.id],
+      parent: Root.id,
       children: []
     }).fetch();
 
@@ -441,7 +441,7 @@ module.exports = {
       name: "car",
       friendlyName: "Pièces et accessoires auto",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 
@@ -450,7 +450,7 @@ module.exports = {
       name: "moto",
       friendlyName: "Pièces et accessoires moto",
       rank: 2,
-      parents: [Parent.id]
+      parent: Parent.id
     }).fetch();
     await pdctCategories.push(pdctCategorie.id);
 

@@ -51,13 +51,11 @@ module.exports = {
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-    parents: {
+    parent: {
       collection: "productcategory",
-      via: "children"
     },
     children: {
       collection: "productcategory",
-      via: "parents"
     },
     products: {
       collection: "product",

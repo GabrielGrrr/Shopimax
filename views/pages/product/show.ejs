@@ -1,0 +1,81 @@
+<div id="show">
+    <span id="product-pictures">
+        <span id="picture-select-bar">
+            <% product.images.forEach(function(image) { %>
+                <div class="image-miniature">
+                    <img src="<%= image.url %>" alt="Miniature de la photo <%= image.order %> du produit">
+                </div>
+                <% }); %>
+        </span>
+        <span id="product-picture-frame">
+            <img src=" <%= product.images[0].url %>" alt="Image du produit <%= product.name %>">
+        </span>
+    </span>
+    <span id="product-file">
+        <h1 id="product-name">
+            <%= product.name %>
+        </h1>
+        <div id="product-brand">
+            de
+            <%= product.brand %>
+        </div>
+        <div id="product-comments-summary">
+            <% for (var i = 0; i < 5; i++) { %>
+                <i class="<%= (i < product.ratingAvg - 0.25)? (i < product.ratingAvg - 0.5)? 'fas fa-star' : 'fas fa-star-half-alt' : 'far fa-star'%>"></i>
+                <% } %>
+                    <a href="/show/<%= product.id %>#reviews" class="commentCount link3">
+                        <%= product.commentCount %>
+                    </a>
+        </div>
+        <div id="product-price">
+            EUR
+            <%= product.offers[0].price %>
+        </div>
+        <div id="product-stock">
+            <%= product.offers[0].remainingStock %> produits restants en stock.
+        </div>
+        <div id="product-delivery">
+            Faites-vous livrer entre le 28 et le 30 août en choisissant la Livraison Prioritaire lors du passage de commande. En savoir
+            plus.
+        </div>
+        <div id="product-sender-seller">
+            Expédié et vendu par IGLM ELECTRONIC.
+        </div>
+        <div id="product-alt-offers">
+            17 neufs à partir de EUR 569,00 2 d'occasion à partir de EUR 539,69
+        </div>
+        <div id="product-variations">
+            Style: DMC-FZ1000
+        </div>
+        <div id="product-details">
+            <%= product.details %>
+        </div>
+    </span>
+    <span id="product-sell-frame">
+        <div id="product-frame-price">
+            EUR
+            <%= product.offers[0].price %>
+                <span class="deliveryFee"> + EUR
+                    <%= product.offers[0].deliveryFee %> Livraison
+                </span>
+        </div>
+        <div id="product-frame-stock">
+
+        </div>
+        <span id="product-frame-sender-seller">
+
+        </span>
+        <div id="product-frame-stock">
+
+        </div>
+        <button id="addToBasket" class="btn btn1">
+            <i class="fas fa-shopping-basket"></i> Ajouter au panier
+        </button>
+        <div id="list-offers">
+            <h1 id="list-offers-title"></h1>
+            <div class="offer">
+                UNE OFFRE ALTERNATIVE
+            </div>
+        </div>
+    </span>
+</div>

@@ -100,12 +100,9 @@ module.exports = {
     var sellers = [];
     var seller;
     var SIREN;
-    // Complètement overkill ici, mais j'ai envie de faire de la validation avancée sur les champs de sellers, et d'un point de vue
-    // culture g c'est toujours intéressant de se plonger dans le droit des entreprises. Donc SIREN, SIRET, RCS et co. sont formatés selon
-    // les spécifications du droit français. La sending / return policy reste la même, cette propriété est de toute façon passablement inutile mais toujours un plus.
-    // VENDEURS
     sails.log("Generating " + nbSellers + " sellers ...");
     for (i = 0; i < nbSellers; i++) {
+      // SIRET, RCS et NumTVA sont composés du SIREN, on le génère donc en avant pour que les données soient cohérentes, à part ça, rien de compliqué
       SIREN = Math.random().toString().slice(2, 11);
       seller = await Seller.create({
         companyName: await faker.company.companyName(),
@@ -123,8 +120,7 @@ module.exports = {
           "Sauf indication contraire lors de la commande, tous les articles seront envoyés sous deux jours suivant la réception d'une commande." +
           "Vous recevrez une notification en cas de retard ou d'annulation de votre commande.",
         returnPolicy:
-          "Vous disposez d’un délai de 30 jours suivant la date de réception pour retourner un article commandé"
-        ,
+          "Vous disposez d’un délai de 30 jours suivant la date de réception pour retourner un article commandé",
         emailAddress: await faker.internet.email(),
         phoneNumber: await faker.phone.phoneNumber(),
         password: await faker.internet.password(),
@@ -139,7 +135,7 @@ module.exports = {
 
     var sellerRvws = [];
     var sellerRvw;
-    // NOTATION VENDEUR
+    // NOTATION VENDEUR - Rien de compliqué ici
     sails.log("Generating " + (nbAvgSellerReview * nbSellers) + " seller reviews ...");
     for (i = 0; i < nbAvgSellerReview * nbSellers; i++) {
       sellerRvw = await SellerReview.create({
@@ -155,11 +151,14 @@ module.exports = {
     sails.log("Generating product categories ...");
     var categories = await sails.helpers.generatecategories();
 
+    var categoryDict = {};
+    categories.forEach(category => {
+      categoryDict[category] = new Array();
+    });
 
     // VARIATIONS
     sails.log("Generating general products variations ...");
     var variations = await sails.helpers.generatevariations();
-
 
     var products = [];
     var product;
@@ -169,29 +168,32 @@ module.exports = {
     var details;
     var pdctImage;
     var pdctImages = [];
+    var category;
     // PRODUCTS --- Will complexify this a little bit to add stuff like relevant set of categories / brand / images
     sails.log("Generating " + nbProducts + " products ...");
     for (i = 0; i < nbProducts; i++) {
-      randNbDetails = await Math.ceil(await Math.random() * nbDetailsMax) + 1;
-      randNbImages = await Math.ceil(await Math.random() * nbImageMax) + 1;
-      //randBool = await Math.random() < 0.5;
 
+      // On crée un nombre de specs randomisées, une spec est un couple de mot / phrase en lorem
+      randNbDetails = await Math.ceil(await Math.random() * nbDetailsMax) + 1;
       details = "{ ";
       for (x = 0; x < randNbDetails + 1; x++) {
         details += '"' + await faker.lorem.word() + '" : "' + await faker.lorem.sentence() + '" , ';
       }
       details += " }";
 
+      // On crée un nombre random d'image, de dimensions randomisées, suivant certaines contraintes de taille minimum toutefois.
+      randNbImages = await Math.ceil(await Math.random() * nbImageMax) + 1;
       pdctImages = [];
       for (y = 0; y < randNbImages; y++) {
         pdctImage = await ProductImage.create({
           url: imageSuppliers[await Math.floor((await Math.random()) * imageSuppliers.length)] + ""
             + (await Math.floor((await Math.random()) * 200) + 300)
-            + "/" + (await Math.floor((await Math.random()) * 200) + 400),
+            + "/" + (await Math.floor((await Math.random()) * 200) + 400) + "?random=" + y,
           order: y
         }).fetch();
         await pdctImages.push(pdctImage.id);
       }
+      category = categories[await Math.floor((await Math.random()) * categories.length)];
 
       product = await Product.create({
         name: await faker.commerce.productAdjective() + " " + await faker.commerce.product(),
@@ -200,10 +202,18 @@ module.exports = {
         saleCount: await Math.round(Math.random() * 1000),
         details: details,
         images: pdctImages,
-        categories: [categories[await Math.floor((await Math.random()) * categories.length)]],
-
+        categories: [category],
       }).fetch();
+      // On garde les ids de produits de côté pour pouvoir créer des offres et notations users qui y correspondent
       await products.push(product.id);
+      // On met de côté les couples bidons produits / catégorie, pour pouvoir informer la catégorie qu'elle est en relation avec
+      // ces produits
+      await categoryDict[category].push(product.id);
+    }
+
+    //On ajoute les différents ids de produits aux collections associatives idoines de leurs catégories respectives
+    for (catId in categoryDict) {
+      await ProductCategory.addToCollection(catId, "products", categoryDict[catId]);
     }
 
 
