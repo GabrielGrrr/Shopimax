@@ -48,76 +48,56 @@ module.exports = {
   // Il faudrait contourner le système en utilisant d'autres modules, mais out of scope (autant dev une autre appli bidon avec les outils idoines).
 
   fn: async function (inputs, exits) {
-    var resultsPerPage = 28;
+    var resultsPerPage = 30;
     var index = (typeof inputs.index == 'undefined') ? 1 : inputs.index;
+    var root = await ProductCategory.findOne({ where: { rank: 0 } })
+      .populate('children').populate('parent');
 
-    if (typeof inputs.categoryId !== 'undefined') {
+    if (typeof inputs.categoryId !== 'undefined' && inputs.categoryId !== root.id) {
       var categoryId = inputs.categoryId;
+      var categoriesIds = [categoryId];
       var category = await ProductCategory.findOne({ where: { id: categoryId } })
         .populate('children')
         .populate('parent');
-      var categoryRank = category.rank;
 
-      var nbResults = 0;
       if (typeof category.children !== 'undefined') {
-        async function updateCount(catObj) {
-          nbResults += await Product.count({ where: { category: catObj.id } });
+        async function getChildrenIds(catObj) {
 
           if (typeof catObj.children !== 'undefined') {
             for (let i = 0; i < catObj.children.length; i++) {
               let child = await ProductCategory.findOne({ where: { id: catObj.children[i].id } }).populate('children');
-              await updateCount(child);
-            };
-          };
-        };
-        await updateCount(category);
-      };
-      /*if (typeof category.parent !== 'undefined') {
-        parent = await ProductCategory.findOne({ where: { id: category.parent } });
-        while (parent.rank > 0) {
-          nbResults += await Product.count({ where: { category: parent.id } });
-          parent = await ProductCategory.findOne({ where: { id: parent.parent } });
+              await categoriesIds.push(child.id);
+              await getChildrenIds(child);
+            }
+          }
         }
-      }*/
+        await getChildrenIds(category);
+      }
+      var nbResults = await Product.count({ category: categoriesIds });
+
     }
     else {
-      var category = await ProductCategory.findOne({ where: { rank: 0 } })
-        .populate('children').populate('parent');
+      var category = root;
       var categoryId = category.id;
-      var categoryRank = 0;
-      var nbResults = await Product.count();
+      nbResults = await Product.count();
     }
 
-    var parent;
     var products = new Map();
-    var productCount = 0;
-    var skip = (index - 1) * resultsPerPage;
-    var skipped = 0;
     // Stream applique une fonction à chaque entrée retournée de la requête. C'est, donc une grosse boucle.
-    await Product.stream({
-      sort: 'saleCount DESC'
-    }).populate('offers', {
-      limit: 1,
-      sort: 'price ASC'
-    }).populate('images', {
-      limit: 1,
-      sort: 'order ASC'
-    }).populate('comments')
-      .populate('category')
+    await Product.stream(
+      typeof categoriesIds !== 'undefined'
+        ? { category: categoriesIds } : null
+    ).limit(resultsPerPage)
+      .skip((index - 1) * resultsPerPage)
+      .sort('saleCount DESC')
+      .populate('offers', {
+        limit: 1,
+        sort: 'price ASC'
+      }).populate('images', {
+        limit: 1,
+        sort: 'order ASC'
+      }).populate('comments')
       .eachRecord(async (product, next) => {
-        if (productCount == resultsPerPage)
-          return exits.success({
-            products: products,
-            nbResults: nbResults,
-            resultsPerPage: resultsPerPage,
-            category: category,
-            pageNavigation: {
-              firstPage: 1,
-              currentPage: index,
-              lastPage: await Math.ceil((typeof nbResults !== 'undefined' ? nbResults : 1) / resultsPerPage),
-            }
-          })
-
         product.commentCount = product.comments.length;
         if (product.commentCount) {
           let sum = 0;
@@ -125,38 +105,10 @@ module.exports = {
             sum += product.comments[i].rating;
           product.ratingAvg = await Math.round((sum / product.commentCount) * 10) / 10;
         }
-        // Pour chaque catégorie à laquelle appartient le produit, on vérifie si elle correspond à la catégorie fournie en paramètre
-        // Si c'est le cas, on le persiste dans les résultats
-
-        if (product.category.id == categoryId) {
-          if (skip && skip > skipped) { skipped++; return next(); }
-          await products.set(product.id, product);
-          productCount++;
-          return next();
-        }
-        // On cherche aussi une correspondance avec une catégorie parente de la catégorie du produit
-        else if (product.category.parent == categoryId) {
-          if (skip && skip > skipped) { skipped++; return next(); }
-          await products.set(product.id, product);
-          productCount++;
-          return next();
-        }
-        // Et les parents du parent
-        else if (product.category.rank - 1 > categoryRank) {
-          parent = await ProductCategory.findOne({ where: { id: product.category.parent } });
-
-          while (parent.rank > categoryRank) {
-            if (parent.parent == categoryId) {
-              if (skip && skip > skipped) { skipped++; return next(); }
-              await products.set(product.id, product);
-              productCount++;
-              return next();
-            }
-            parent = await ProductCategory.findOne({ where: { id: parent.parent } });
-          }
-        }
+        await products.set(product.id, product);
         return next();
       });
+
 
     return exits.success({
       products: products,
