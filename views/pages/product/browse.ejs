@@ -1,8 +1,8 @@
 <div id="browse">
     <div id="carousel">
     </div>
-    <div id="browse-page">
-        <div id="browse-menu">
+    <section id="browse-page">
+        <section id="browse-menu">
             <div id="menu-categories">
                 <h2>Catégories : </h2>
                 <% if(!category.parent){ %>
@@ -35,7 +35,7 @@
             <div id="menu-options">
                 <h2>Critères additionnels : </h2>
             </div>
-        </div>
+        </section>
 
         <div id="browse-content">
             <div id="results-bar">
@@ -100,48 +100,48 @@
                                 <%= i %>
                             </span>
                             <% } else { %>
-                                <a href="/browse/<%= i %>/<%= category.id %>">
-                                    <%= i %>
-                                </a>
-                                <% } %>
-                                    <% } %>
-                                        <% } else { %>
-                                            <% for (var i = pageNavigation.firstPage; i <= Math.min(3, Math.max(pageNavigation.currentPage - 4, 3)); i++) { %>
-                                                <% if (pageNavigation.currentPage == i) { %>
-                                                    <span id="current-page">
-                                                        <%= i %>
-                                                    </span>
-                                                    <% } else { %>
-                                                        <a href="/browse/<%= i %>/<%= category.id %>">
-                                                            <%= i %>
-                                                        </a>
-                                                        <% } %>
-                                                            <% } %>
-                                                                <% if (pageNavigation.currentPage > 7) { %>
-                                                                    <span class> ... </span>
-                                                                    <% } %>
-                                                                        <% for (var j = Math.max(4, pageNavigation.currentPage - 3); j <= Math.min(pageNavigation.lastPage, pageNavigation.currentPage + 3); j++) { %>
-                                                                            <% if (pageNavigation.currentPage == j) { %>
-                                                                                <span id="current-page">
-                                                                                    <%= j %>
-                                                                                </span>
-                                                                                <% } else { %>
-                                                                                    <a href="/browse/<%= j %>/<%= category.id %>">
-                                                                                        <%= j %>
-                                                                                    </a>
-                                                                                    <% } %>
-                                                                                        <% } %>
-                                                                                            <% if (pageNavigation.lastPage > (pageNavigation.currentPage +3)) { %>
-                                                                                                <span class="end-page"> ...
-                                                                                                    <a class="last-page" href="/browse/<%= pageNavigation.lastPage %>/<%= category.id %>">
-                                                                                                        <%= pageNavigation.lastPage %>
-                                                                                                    </a>
-                                                                                                </span>
-                                                                                                <% } %>
-                                                                                                    <% } %>
+       <a href="/browse/<%= i %>/<%= category.id %>">
+           <%= i %>
+       </a>
+       <% } %>
+           <% } %>
+               <% } else { %>
+                   <% for (var i = pageNavigation.firstPage; i <= Math.min(3, Math.max(pageNavigation.currentPage - 4, 3)); i++) { %>
+                       <% if (pageNavigation.currentPage == i) { %>
+                           <span id="current-page">
+                               <%= i %>
+                           </span>
+              <% } else { %>
+                  <a href="/browse/<%= i %>/<%= category.id %>">
+                      <%= i %>
+                  </a>
+                  <% } %>
+                      <% } %>
+                          <% if (pageNavigation.currentPage > 7) { %>
+          <span class> ... </span>
+          <% } %>
+              <% for (var j = Math.max(4, pageNavigation.currentPage - 3); j <= Math.min(pageNavigation.lastPage, pageNavigation.currentPage + 3); j++) { %>
+                  <% if (pageNavigation.currentPage == j) { %>
+                      <span id="current-page">
+                          <%= j %>
+                      </span>
+                      <% } else { %>
+                          <a href="/browse/<%= j %>/<%= category.id %>">
+                              <%= j %>
+                          </a>
+                          <% } %>
+                              <% } %>
+                                  <% if (pageNavigation.lastPage > (pageNavigation.currentPage +3)) { %>
+                                      <span class="end-page"> ...
+                                          <a class="last-page" href="/browse/<%= pageNavigation.lastPage %>/<%= category.id %>">
+                                              <%= pageNavigation.lastPage %>
+                                          </a>
+                                      </span>
+                                      <% } %>
+                                          <% } %>
             </div>
 
         </div>
-    </div>
+    </section>
 </div>
 <%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>
