@@ -70,14 +70,18 @@
                                     <span class="sbs">
                                         <img src="/images/sbs.png" alt="Envoyé par shopimax">
                                     </span>
-                                    <% } else { %>
-                                        <span class="deliveryFee"> + EUR
+                                    <span class="deliveryFee">
+                                    <% } else if (product.offers[0].deliveryFee > 0) { %>
+                                         + EUR
                                             <%= product.offers[0].deliveryFee %> Livraison
-                                        </span>
+                                    
                                         <% } %>
+                                    </span>
                         </div>
                         <% if (product.offers[0].sentByShopimax) { %>
                             <div class="freeDelivAvailable">Livraison gratuite possible.</div>
+                            <% } else if (product.offers[0].deliveryFee == 0) { %>
+                            <div class="freeDelivAvailable">Livraison gratuite.</div>
                             <% } %>
                                 <div class="product-rating">
                                 <%= product.ratingAvg %>

@@ -160,15 +160,16 @@ module.exports = {
     sails.log("Generating general products variations ...");
     var variations = await sails.helpers.generatevariations();
 
-    var products = [];
+
     var product;
-    var randBool;
-    var randNbDetails;
-    var randNbImages;
+    var category;
     var details;
     var pdctImage;
+    var randNbDetails;
+    var randNbImages;
+    var priceRanges = new Map();
     var pdctImages = [];
-    var category;
+    var products = [];
     // PRODUCTS --- Will complexify this a little bit to add stuff like relevant set of categories / brand / images
     sails.log("Generating " + nbProducts + " products ...");
     for (i = 0; i < nbProducts; i++) {
@@ -194,6 +195,7 @@ module.exports = {
         }).fetch();
         await pdctImages.push(pdctImage.id);
       }
+      // On choisit une catégorie au hasard, à laquelle on assignera le produit
       category = categories[await Math.floor((await Math.random()) * categories.length)];
 
       product = await Product.create({
@@ -205,8 +207,12 @@ module.exports = {
         images: pdctImages,
         category: category,
       }).fetch();
+      // On détermine une gamme de prix dans laquelle se situeront les offres, pour davantage de cohérence
+      await priceRanges.set(product.id, await Math.round(await Math.random() < 0.5 ? 100 : (await Math.random() < 0.5 ? 10 : 2000)));
+
       // On garde les ids de produits de côté pour pouvoir créer des offres et notations users qui y correspondent
       await products.push(product.id);
+
       // On met de côté les couples bidons produits / catégorie, pour pouvoir informer la catégorie qu'elle est en relation avec
       // ces produits
       await categoryDict[category].push(product.id);
@@ -235,15 +241,21 @@ module.exports = {
     var offers = [];
     var offer;
     var sbs;
+    var product;
     // OFFERS
     sails.log("Generating " + (nbAvgOffers * nbProducts) + " offers ...");
     for (i = 0; i < nbAvgComments * nbProducts; i++) {
-      sbs = await Math.random() < 0.5 ? true : false;
+      product = products[await Math.floor((await Math.random()) * nbProducts)];
+      if (await priceRanges.get(product) == 10)
+        sbs = false;
+      else
+        sbs = await Math.random() < 0.2 ? true : false;
+
       offer = await Offer.create({
         type: await Math.random() < 0.5 ? "Neuf" : "Reconditionné",
-        price: await Math.round(Math.random() * (Math.random() < 0.5 ? 10000 : (Math.random() < 0.5 ? 200 : 1000)) * 100) / 100,
-        deliveryFee: sbs ? 0 : (await Math.round(Math.random() * 1500) / 100),
-        remainingStock: Math.floor(Math.random() * 100),
+        price: await Math.round(await Math.random() * await priceRanges.get(product) * 100) / 100,
+        deliveryFee: (sbs || await priceRanges.get(product) == 2000) ? 0 : (await Math.round(Math.random() * 1500) / 100),
+        remainingStock: await Math.floor(await Math.random() * 100),
         sentByShopimax: sbs,
         seller: sellers[await Math.floor((await Math.random()) * nbSellers)],
         product: products[await Math.floor((await Math.random()) * nbProducts)]

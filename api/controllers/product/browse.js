@@ -44,7 +44,7 @@ module.exports = {
   // on doit itérer en streamant la table produit et ajouter manuellement les notes users moyennes, nb de commentaires par produits, nb de commentaires
   // par produit et par note, date de livraison estimée etc etc.
   // Et puisque Sails ne supporte ni les nested records (accès sur table à plus d'1 pas de distance relationnel),
-  // ni les requêtes profondes, les requêtes construites ici avec le querybuilder natif sont très sales.
+  // ni les requêtes profondes, les requêtes construites ici avec le querybuilder natif sont plutôt sales.
   // Il faudrait contourner le système en utilisant d'autres modules, mais out of scope (autant dev une autre appli bidon avec les outils idoines).
 
   fn: async function (inputs, exits) {
@@ -62,7 +62,6 @@ module.exports = {
 
       if (typeof category.children !== 'undefined') {
         async function getChildrenIds(catObj) {
-
           if (typeof catObj.children !== 'undefined') {
             for (let i = 0; i < catObj.children.length; i++) {
               let child = await ProductCategory.findOne({ where: { id: catObj.children[i].id } }).populate('children');
@@ -86,13 +85,13 @@ module.exports = {
     // Stream applique une fonction à chaque entrée retournée de la requête. C'est, donc une grosse boucle.
     await Product.stream(
       typeof categoriesIds !== 'undefined'
-        ? { category: categoriesIds } : null
+        ? { category: categoriesIds } : {}
     ).limit(resultsPerPage)
       .skip((index - 1) * resultsPerPage)
       .sort('saleCount DESC')
       .populate('offers', {
         limit: 1,
-        sort: 'price ASC'
+        sort: [{ sentByShopimax: 'DESC' }, { price: 'ASC' }]
       }).populate('images', {
         limit: 1,
         sort: 'order ASC'
