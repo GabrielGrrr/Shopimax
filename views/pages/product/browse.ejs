@@ -37,7 +37,7 @@
             </div>
         </div>
 
-        <div id=browse-content>
+        <div id="browse-content">
             <div id="results-bar">
                 <span id="results-count">Produits
                     <%= (pageNavigation.currentPage * resultsPerPage) - resultsPerPage + 1 %> à
@@ -94,7 +94,7 @@
 
             <div class="page-navigation">
                 <% if (pageNavigation.lastPage < 12) { %>
-                    <% for (var i = pageNavigation.firstPage; i < pageNavigation.lastPage; i++) { %>
+                    <% for (var i = pageNavigation.firstPage; i <= pageNavigation.lastPage; i++) { %>
                         <% if (pageNavigation.currentPage==i) { %>
                             <span id="current-page">
                                 <%= i %>

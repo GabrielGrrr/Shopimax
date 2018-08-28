@@ -79,8 +79,6 @@ module.exports = {
           parent = await ProductCategory.findOne({ where: { id: parent.parent } });
         }
       }*/
-
-      //var nbResults = await Product.count({ where: { category: categoryId } });
     }
     else {
       var category = await ProductCategory.findOne({ where: { rank: 0 } })
@@ -93,11 +91,11 @@ module.exports = {
     var parent;
     var products = new Map();
     var productCount = 0;
+    var skip = (index - 1) * resultsPerPage;
+    var skipped = 0;
     // Stream applique une fonction à chaque entrée retournée de la requête. C'est, donc une grosse boucle.
     await Product.stream({
-      //where: { name: 'mary' },
-      skip: (index - 1) * resultsPerPage,
-      sort: 'createdAt DESC'
+      sort: 'saleCount DESC'
     }).populate('offers', {
       limit: 1,
       sort: 'price ASC'
@@ -131,12 +129,14 @@ module.exports = {
         // Si c'est le cas, on le persiste dans les résultats
 
         if (product.category.id == categoryId) {
+          if (skip && skip > skipped) { skipped++; return next(); }
           await products.set(product.id, product);
           productCount++;
           return next();
         }
         // On cherche aussi une correspondance avec une catégorie parente de la catégorie du produit
         else if (product.category.parent == categoryId) {
+          if (skip && skip > skipped) { skipped++; return next(); }
           await products.set(product.id, product);
           productCount++;
           return next();
@@ -147,6 +147,7 @@ module.exports = {
 
           while (parent.rank > categoryRank) {
             if (parent.parent == categoryId) {
+              if (skip && skip > skipped) { skipped++; return next(); }
               await products.set(product.id, product);
               productCount++;
               return next();
