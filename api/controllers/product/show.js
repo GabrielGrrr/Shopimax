@@ -38,13 +38,23 @@ module.exports = {
     }).populate('comments')
       .populate('category');
 
+    // On boucle également sur ces entrées (comments et offers) pour les afficher dans la vue, mais pour maintenir la structure MVC, je garde tous les accès database
+    // et les transformations d'éléments dans l'action / controller. Ca fait une complexité algorithmique inutilement deux fois plus grande cependant.
     var sum = 0;
     product.commentCount = product.comments.length;
     if (product.commentCount) {
-      for (var i = 0; i < product.commentCount; i++)
+      for (let i = 0; i < product.commentCount; i++)
         sum += product.comments[i].rating;
       product.ratingAvg = Math.round((sum / product.commentCount) * 10) / 10;
     }
+
+    for (let i = 0; i < product.offers.length; i++) {
+      product.offers[i].seller = await Seller.find({
+        where: { id: product.offers[i].seller },
+      });
+    }
+    sails.log(product.offers);
+
     return exits.success({
       product: product
     });

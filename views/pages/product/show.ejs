@@ -32,7 +32,13 @@
             <%= product.offers[0].price %>
         </div>
         <div id="product-stock">
-            <%= product.offers[0].remainingStock %> produits restants en stock.
+        <% if (product.offers[0].remainingStock > 10) {%>
+        <div id="product-frame-stock" class="text-success"><%= product.offers[0].remainingStock %> produits restants.</div>
+        <% } else if(product.offers[0].remainingStock == 0) { %>
+        <div id="product-frame-stock" class="text-danger">Aucun produit en stock.<br/> Renouvellement estimé : 5-7 jours.</div>
+        <% } else { %>
+        <div id="product-frame-stock" class="text-warning">Plus que <%= product.offers[0].remainingStock %> produits restants !</div>
+        <% } %>
         </div>
         <div id="product-delivery">
             Faites-vous livrer entre le ?? et le ?? ?? en choisissant la Livraison Prioritaire lors du passage de commande.
@@ -59,30 +65,77 @@
         </div>
     </span>
     <span id="product-sell-frame">
+    <div id ="main-offer">
         <div id="product-frame-price">
             EUR
             <%= product.offers[0].price %>
-                <span class="deliveryFee"> + EUR
-                    <%= product.offers[0].deliveryFee %> Livraison
-                </span>
+            <% if (product.offers[i].sentByShopimax || product.offers[0].deliveryFee == 0) {%>
+                <span class="deliveryFee text-success">Livraison gratuite</span>
+            <% } else { %>
+                <span class="deliveryFee">+ EUR <%= product.offers[i].deliveryFee %> Livraison</span>
+            <% } %>
         </div>
-        <div id="product-frame-stock">
-
-        </div>
+        <% if (product.offers[0].remainingStock > 10) {%>
+            <div id="product-frame-stock" class="text-success"><%= product.offers[0].remainingStock %> produits restants.</div>
+            <% } else if(product.offers[0].remainingStock == 0) { %>
+            <div id="product-frame-stock" class="text-danger">Aucun produit en stock.<br/> Renouvellement estimé : 5-7 jours.</div>
+            <% } else { %>
+            <div id="product-frame-stock" class="text-warning">Plus que <%= product.offers[0].remainingStock %> produits restants !</div>
+            <% } %>
         <span id="product-frame-sender-seller">
-
+            Expédié par, vendu par
         </span>
-        <div id="product-frame-stock">
-
-        </div>
-        <button id="addToBasket" class="btn btn1">
-            <i class="fas fa-shopping-basket"></i> Ajouter au panier
-        </button>
-        <div id="list-offers">
-            <h1 id="list-offers-title"></h1>
-            <div class="offer">
-                ICI, OFFRES ALTERNATIVES
+        <div class="offer-addtoBasket">
+                    <a href="/addtoBasket/<%= product.offers[0].id %>">
+                        <button id="addToBasket" class="btn">
+                        <i class="fas fa-shopping-basket"></i> Ajouter au panier
+                        </button>
+                    </a>
             </div>
+        </div>
+        <div id="list-offers">
+            <h2 id="list-offers-title">Autres vendeurs Shopimax ... </h2>
+            <% for(let i = 1; i < product.offers.length; i++) { %>
+            <div class="offer">
+                <div class="sellerName"><%= product.offers[i].seller[0].companyName %> <%= product.offers[i].seller[0].statutJuridique %></div>
+                <div class="offerType"><% switch (product.offers[i].type) {
+                    case 'Neuf' : %>
+                            <span class="produit-neuf">Produit neuf</span>
+                            <% break;
+
+                    case 'Reconditionné' : %>
+                            <span class="produit-recond">Produit reconditionné</span>
+                            <% break;
+
+                    case 'Occasion' : %>
+                            <span class="produit-occasion">Produit d'occasion</span>
+                            <% break;
+
+                    } %>
+                </div>
+                
+                <span class="offerPrice">EUR <%= product.offers[i].price %></span>
+                <% if (product.offers[i].sentByShopimax || product.offers[i].deliveryFee == 0) {%>
+                    <span class="deliveryFee text-success">Livraison gratuite</span>
+                <% } else { %>
+                <span class="deliveryFee">+ EUR <%= product.offers[i].deliveryFee %> Livraison</span>
+                <% } %>
+                <% if (product.offers[i].remainingStock > 10) {%>
+                    <div id="product-frame-stock" class="text-success"><%= product.offers[i].remainingStock %> produits restants.</div>
+                <% } else if(product.offers[0].remainingStock == 0) { %>
+                    <div id="product-frame-stock" class="text-danger">Aucun produit en stock.<br/> Renouvellement estimé : 5-7 jours.</div>
+                <% } else { %>
+                    <div id="product-frame-stock" class="text-warning">Plus que <%= product.offers[i].remainingStock %> produits restants !</div>
+                <% } %>
+                <div class="offer-addtoBasket">
+                    <a href="/addtoBasket/<%= product.offers[i].id %>">
+                        <button id="addToBasket" class="btn">
+                        <i class="fas fa-shopping-basket"></i> Ajouter au panier
+                        </button>
+                    </a>
+                </div>
+            </div>
+            <% } %>
         </div>
     </span>
 </div>

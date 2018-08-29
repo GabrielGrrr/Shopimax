@@ -228,7 +228,7 @@ jusqu'à la validation du lien de confirmation envoyé par email.`
     lastSeenAt: {
       type: "number",
       description:
-        "Un timestamp (epoch ms) représentant le dernier moment où l'user a interagit avec le backend, ou 0 si null.",
+        "Un timestamp (epoch ms) représentant le dernier moment où l'user a interagi avec le backend, ou 0 si null.",
       example: 1502844074211
     },
 
@@ -241,6 +241,10 @@ jusqu'à la validation du lien de confirmation envoyé par email.`
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
     siegeSocial: {
       model: "address"
+    },
+    reviews: {
+      collection: "SellerReview",
+      via: "seller"
     }
   }
 };

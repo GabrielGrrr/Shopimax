@@ -35,24 +35,20 @@ module.exports = {
     }
   },
 
-  // EN : Since sails erased instance methods and does not provide any way to get computed fields (like, wtf ?), we stream through our product table
-  // or document, add the results to a dictionary, and for each entry, manually add computed ratings, comment count, estimated delivery date and such
-  // It would be more efficient to add those datas to the DB and refresh them on relevant update / create / delete
-
   // FR : Puisque sails a désormais supprimé les méthodes d'instance (méthodes accessibles sur l'instance d'un modèle et non sa classe), et ne permet
   // aucun moyen pour implémenter des champs calculés (qui résultent d'opérations simple sur d'autres champs, comme le count d'éléments enfants),
-  // on doit itérer en streamant la table produit et ajouter manuellement les notes users moyennes, nb de commentaires par produits, nb de commentaires
+  // on doit itérer sur la table produit et ajouter manuellement les notes users moyennes, nb de commentaires par produits, nb de commentaires
   // par produit et par note, date de livraison estimée etc etc.
-  // Et puisque Sails ne supporte ni les nested records (accès sur table à plus d'1 pas de distance relationnel),
-  // ni les requêtes profondes, les requêtes construites ici avec le querybuilder natif sont plutôt sales.
+  // Aussi, comme Sails ne supporte ni les nested records (jointures / populate multiples, soit accès sur table à plus d'1 pas de distance relationnel),
+  // ni les requêtes profondes, l'algorithme d'accès aux données est plus complexe que ce que j'aurais apprécié.
   // Il faudrait contourner le système en utilisant d'autres modules, mais out of scope (autant dev une autre appli bidon avec les outils idoines).
-
   fn: async function (inputs, exits) {
     var resultsPerPage = 30;
     var index = (typeof inputs.index == 'undefined') ? 1 : inputs.index;
     var root = await ProductCategory.findOne({ where: { rank: 0 } })
       .populate('children').populate('parent');
 
+    // On pourrait également récupérer l'ensemble de l'arbre des catégories, plutôt que de faire un find en boucle, il n'est pas bien lourd
     if (typeof inputs.categoryId !== 'undefined' && inputs.categoryId !== root.id) {
       var categoryId = inputs.categoryId;
       var categoriesIds = [categoryId];
@@ -81,9 +77,7 @@ module.exports = {
       nbResults = await Product.count();
     }
 
-    var products = new Map();
-    // Stream applique une fonction à chaque entrée retournée de la requête. C'est, donc une grosse boucle.
-    await Product.stream(
+    products = await Product.find(
       typeof categoriesIds !== 'undefined'
         ? { category: categoriesIds } : {}
     ).limit(resultsPerPage)
@@ -95,18 +89,23 @@ module.exports = {
       }).populate('images', {
         limit: 1,
         sort: 'order ASC'
-      }).populate('comments')
-      .eachRecord(async (product, next) => {
-        product.commentCount = product.comments.length;
-        if (product.commentCount) {
-          let sum = 0;
-          for (let i = 0; i < product.commentCount; i++)
-            sum += product.comments[i].rating;
-          product.ratingAvg = await Math.round((sum / product.commentCount) * 10) / 10;
-        }
-        await products.set(product.id, product);
-        return next();
-      });
+      }).populate('comments');
+
+    // FR : Puisque sails a désormais supprimé les méthodes d'instance (méthodes accessibles sur l'instance d'un modèle avec this en paramètre et non sa classe),
+    // On parcours l'ensemble des données récupérées pour calculer la note moyenne et le compteur de notes
+    // EN : Since sails erased instance methods and does not provide any way to get computed fields, we loop through our (limited) products records, 
+    // and for each entry, manually add computed ratings, comment count, estimated delivery date and such
+    // It would be more efficient to add those datas to the DB and refresh them on relevant update / create / delete, just sayin'
+    products.forEach(async (product, next) => {
+      product.commentCount = product.comments.length;
+      if (product.commentCount) {
+        let sum = 0;
+        for (let i = 0; i < product.commentCount; i++)
+          sum += product.comments[i].rating;
+        product.ratingAvg = await Math.round((sum / product.commentCount) * 10) / 10;
+      }
+      return next();
+    });
 
 
     return exits.success({

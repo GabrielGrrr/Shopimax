@@ -1,6 +1,6 @@
 @footer-height: 40px;
 @container-md-max-width: 1100px;
-@color1: rgb(253, 236, 229);
+@color1: white;
 @color2: #a52942;
 @color3: #343a40; //aussi, dark var de bootstrap
 @color4: grey;
@@ -10,6 +10,8 @@ html,
 body {
   height: 100%;
   margin: 0;
+  background-color:@color3;
+  color:white;
 }
 
 .link1 {
@@ -44,7 +46,7 @@ h1 {
   0px -5px 35px rgba(255,255,255,0.3);
 
   &:hover {
-    color: @color2;
+    color: black;
     text-decoration:none;
     text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
              0px 8px 13px rgba(0,0,0,0.1),
@@ -102,17 +104,16 @@ h1 {
   position:absolute;
   width:100%;
   padding-bottom: @footer-height;
-  background-color:@color1;
   header {
     position: fixed;
     width: 100%;
-    z-index: 2;
-    border-bottom:1px solid black;
+    z-index: 15;
+    border-bottom:1px solid rgba(43, 41, 41, 0.884);
     -moz-box-shadow: 1px 1px 5px 0.1px #343434;
--webkit-box-shadow: 1px 1px 5px 0.1px #343434;
--o-box-shadow: 1px 1px 5px 0.1px #343434;
-box-shadow: 1px 1px 5px 0.1px #343434;
-filter:progid:DXImageTransform.Microsoft.Shadow(color=#343434, Direction=134, Strength=5);
+    -webkit-box-shadow: 1px 1px 5px 0.1px #343434;
+    -o-box-shadow: 1px 1px 5px 0.1px #343434;
+    box-shadow: 1px 1px 5px 0.1px #343434;
+    filter:progid:DXImageTransform.Microsoft.Shadow(color=#343434, Direction=134, Strength=5);
     a {
       .link1();
       display: inline;
@@ -139,6 +140,7 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#343434, Direction=134, St
   position: absolute;
   left: 0px;
   bottom: 0px;
+  color:@color1;
   .xs-only {
     display: none;
   }
