@@ -15,6 +15,7 @@ module.exports.policies = {
 
   "entrance/*": true,
   "product/*": true,
+  "basket/*": true,
   "account/logout": true,
   "fixtures": true,
   "view-homepage-or-redirect": true,

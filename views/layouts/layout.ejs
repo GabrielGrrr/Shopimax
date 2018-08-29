@@ -56,7 +56,10 @@
                 <a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/account">Mon compte</a>
               </span>
               <a class="btn btn1" href="/basket">
-                <i class="fas fa-shopping-basket"></i> Mon panier
+                <i class="fas fa-shopping-basket"></i> Mon panier 
+                <% if(typeof req.session.basketSize !== 'undefined') { %>
+                  <span id='basket-size'><%= req.session.basketSize %></span>
+                <% } %>
               </a>
             </div>
             <!-- Only in mobile nav -->

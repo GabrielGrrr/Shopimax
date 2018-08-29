@@ -53,7 +53,6 @@ module.exports = {
         where: { id: product.offers[i].seller },
       });
     }
-    sails.log(product.offers);
 
     return exits.success({
       product: product

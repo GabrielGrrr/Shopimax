@@ -104,9 +104,7 @@ module.exports = {
           sum += product.comments[i].rating;
         product.ratingAvg = await Math.round((sum / product.commentCount) * 10) / 10;
       }
-      return next();
     });
-
 
     return exits.success({
       products: products,

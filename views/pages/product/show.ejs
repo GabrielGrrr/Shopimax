@@ -33,32 +33,40 @@
         </div>
         <div id="product-stock">
         <% if (product.offers[0].remainingStock > 10) {%>
-        <div id="product-frame-stock" class="text-success"><%= product.offers[0].remainingStock %> produits restants.</div>
+            <div id="product-frame-stock" class="text-success"><%= product.offers[0].remainingStock %> produits restants.</div>
         <% } else if(product.offers[0].remainingStock == 0) { %>
-        <div id="product-frame-stock" class="text-danger">Aucun produit en stock.<br/> Renouvellement estimé : 5-7 jours.</div>
+            <div id="product-frame-stock" class="text-danger">Aucun produit en stock.<br/> Renouvellement estimé : 5-7 jours.</div>
         <% } else { %>
-        <div id="product-frame-stock" class="text-warning">Plus que <%= product.offers[0].remainingStock %> produits restants !</div>
+            <div id="product-frame-stock" class="text-warning">Plus que <%= product.offers[0].remainingStock %> produits restants !</div>
         <% } %>
         </div>
         <div id="product-delivery">
-            Faites-vous livrer entre le ?? et le ?? ?? en choisissant la Livraison Prioritaire lors du passage de commande.
+        <%
+        var delivDate = new Date(new Date().getTime() + 72 * 60 * 60 * 1000);
+        var day = delivDate.getDate()
+        var month = delivDate.getMonth() + 1
+        var year = delivDate.getFullYear()
+        %>
+            Faites-vous livrer entre le <%= delivDate.getDate() %> et le <%= delivDate.getDate() + 1 %> en choisissant la Livraison Prioritaire lors du passage de commande !
         </div>
         <div id="product-sender-seller">
-            Expédié et vendu par ??.
+        <% if (product.offers[0].sentByShopimax) { %>
+        Expédié par Shopimax, vendu par <%= product.offers[0].seller[0].companyName %>
+        <% } else { %>
+        Expédié et vendu par <%= product.offers[0].seller[0].companyName %>
+        <% } %>
         </div>
         <div id="product-alt-offers">
-            ?? neufs à partir de EUR ?? et ?? d'occasion à partir de EUR ??
         </div>
         <div id="product-variations">
-            Style: ??
         </div>
         <div id="product-details">
             <h2>Descriptif technique :</h2>
             <ul>
                 <% for(let entry in product.details) { %>
                     <li>
-                        <%= entry %> :
-                            <%= product.details[entry] %>
+                        <span class="feature"><%= entry %></span> :
+                            <span class="feature-value"><%= product.details[entry] %></span>
                     </li>
                     <% } %>
             </ul>
@@ -69,10 +77,10 @@
         <div id="product-frame-price">
             EUR
             <%= product.offers[0].price %>
-            <% if (product.offers[i].sentByShopimax || product.offers[0].deliveryFee == 0) {%>
+            <% if (product.offers[0].sentByShopimax || product.offers[0].deliveryFee == 0) {%>
                 <span class="deliveryFee text-success">Livraison gratuite</span>
             <% } else { %>
-                <span class="deliveryFee">+ EUR <%= product.offers[i].deliveryFee %> Livraison</span>
+                <span class="deliveryFee">+ EUR <%= product.offers[0].deliveryFee %> Livraison</span>
             <% } %>
         </div>
         <% if (product.offers[0].remainingStock > 10) {%>
@@ -83,10 +91,9 @@
             <div id="product-frame-stock" class="text-warning">Plus que <%= product.offers[0].remainingStock %> produits restants !</div>
             <% } %>
         <span id="product-frame-sender-seller">
-            Expédié par, vendu par
         </span>
         <div class="offer-addtoBasket">
-                    <a href="/addtoBasket/<%= product.offers[0].id %>">
+                    <a href="/basket/add/<%= product.offers[0].id %>">
                         <button id="addToBasket" class="btn">
                         <i class="fas fa-shopping-basket"></i> Ajouter au panier
                         </button>
@@ -97,7 +104,7 @@
             <h2 id="list-offers-title">Autres vendeurs Shopimax ... </h2>
             <% for(let i = 1; i < product.offers.length; i++) { %>
             <div class="offer">
-                <div class="sellerName"><%= product.offers[i].seller[0].companyName %> <%= product.offers[i].seller[0].statutJuridique %></div>
+                <div class="sellerName"><%= product.offers[i].seller[0].companyName %></div>
                 <div class="offerType"><% switch (product.offers[i].type) {
                     case 'Neuf' : %>
                             <span class="produit-neuf">Produit neuf</span>
@@ -128,7 +135,7 @@
                     <div id="product-frame-stock" class="text-warning">Plus que <%= product.offers[i].remainingStock %> produits restants !</div>
                 <% } %>
                 <div class="offer-addtoBasket">
-                    <a href="/addtoBasket/<%= product.offers[i].id %>">
+                    <a href="/basket/add/<%= product.offers[i].id %>">
                         <button id="addToBasket" class="btn">
                         <i class="fas fa-shopping-basket"></i> Ajouter au panier
                         </button>

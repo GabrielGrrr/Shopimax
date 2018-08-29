@@ -84,11 +84,12 @@
                             <div class="freeDelivAvailable">Livraison gratuite.</div>
                             <% } %>
                                 <div class="product-rating">
-                                <%= product.ratingAvg %>
+                                <a href="/show/<%= product.id %>#reviews" class="commentCount">
                                     <% for (var i = 0; i < 5; i++) { %>
                                         <i class="<%= (i < product.ratingAvg - 0.25)? (i < product.ratingAvg - 0.5)? 'fas fa-star' : 'fas fa-star-half-alt' : 'far fa-star'%>"></i>
                                         <% } %>
-                                            <a href="/show/<%= product.id %>#reviews" class="commentCount link3">
+                                        </a>
+                                        <a href="/show/<%= product.id %>#reviews" class="link3">
                                                 <%= product.commentCount %>
                                             </a>
                                 </div>
