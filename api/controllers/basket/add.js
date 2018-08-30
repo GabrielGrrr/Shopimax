@@ -32,9 +32,16 @@ module.exports = {
   fn: async function (inputs, exits) {
     if (typeof this.req.session === 'undefined')
       return exits.redirect();
+    if (typeof inputs.offerId === 'undefined')
+      return exits.redirect();
+
 
     var offer = await Offer.findOne({ where: { id: inputs.offerId } });
-    var product = await Product.findOne({ where: { id: offer.product } });
+    var product = await Product.findOne({ where: { id: offer.product } })
+      .populate('images', {
+        limit: 1,
+        sort: 'order ASC'
+      });
     var qtt = typeof quantity === 'undefined' ? 1 : quantity;
 
     if (typeof offer === 'undefined')
@@ -46,9 +53,14 @@ module.exports = {
     if (typeof basket === 'undefined')
       var basket = new Array();
 
-    await basket.push([offer, qtt]);
+    if (typeof this.req.session.basketSize === 'undefined')
+      this.req.session.basketSize = qtt;
+    else
+      this.req.session.basketSize += qtt;
 
-    this.req.session.basketSize = basket.length;
+    offer.productName = product.name;
+    offer.productImage = product.images[0].url;
+    await basket.push([offer, qtt]);
     this.req.session.basket = await JSON.stringify(basket);
 
     return exits.success({ product: product, quantity: qtt });

@@ -55,7 +55,7 @@
               <span>
                 <a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/account">Mon compte</a>
               </span>
-              <a class="btn btn1" href="/basket">
+              <a class="btn btn1" href="/basket/show">
                 <i class="fas fa-shopping-basket"></i> Mon panier 
                 <% if(typeof req.session.basketSize !== 'undefined') { %>
                   <span id='basket-size'><%= req.session.basketSize %></span>
@@ -66,7 +66,7 @@
             <a class="nav-item nav-link ml-2 d-md-none" href="/signup">
               <i class="fas fa-user"></i> Connexion
             </a>
-            <a class="nav-item nav-link ml-2 d-md-none" href="/basket">
+            <a class="nav-item nav-link ml-2 d-md-none" href="/basket/show">
               <i class="fas fa-shopping-basket"></i>
             </a>
             <% } %>

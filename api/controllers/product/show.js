@@ -32,7 +32,7 @@ module.exports = {
       where: { id: inputs.productId },
     }).populate('offers', {
       //where: { type: 'Neuf' },
-      sort: 'price ASC'
+      sort: [{ sentByShopimax: 'DESC' }, { price: 'ASC' }]
     }).populate('images', {
       sort: 'order ASC'
     }).populate('comments')

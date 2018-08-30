@@ -1,0 +1,41 @@
+<div id="basket-show">
+    <div id ="basket-items-list">
+    <h1>Votre panier :</h1>   
+        <% if(basketEmpty) { %>
+            <p>Votre panier est vide ! Remplissez-le dés-maintenant en consultant <a href="/browse">notre catalogue</a>.</p>
+            <% } else { %>
+            <div id= "basket-item-column-headers"><span>Image</span><span>Infos</span><span>Prix</span><span>Quantité</span></div>
+                <% for(let i = 0; i < basket.length; i++) { %>
+                <div class="basket-item">
+                    <span class="product-basket-image">
+                    <img src="<%= basket[i][0].productImage %>">
+                    </span>
+                    <span class="product-basket-infos">
+                        <h2 class="product-basket-name">
+                            <a href="/show/<%= basket[i][0].product %>" class="link3"><%= basket[i][0].productName %></a>
+                        </h2>
+                        <div class="product-basket-stock">
+                        <%if(basket[i][0].remainingStock > 0) { %>  
+                            En stock
+                        <% } else { %>
+                            Stock épuisé.
+                        <% } %>
+                        </div>
+                        <div class="product-basket-delete">
+                        <a href="">Supprimer</a>
+                        </div>
+                    </span>
+                    <span class="price">
+                        EUR <%= basket[i][0].price %>
+                    </span>
+                    <span class="product-basket-quantity">
+                        <%= basket[i][1] %>
+                    </span>
+                </div>
+            <% } } %>
+            <% if(!basketEmpty) { %>
+                <div id="total-order"> Sous-total (<%= basketSize %> articles) : <span class="price">EUR <%= orderTotal %></span> </div>
+                <div id="checkoutbutton"><a href="/transaction/checkout"><button class="btn">Passer la commande</button></a></div>
+            <% } %>
+    </div>
+</div>

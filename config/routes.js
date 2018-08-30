@@ -22,6 +22,7 @@ module.exports.routes = {
   "GET /show/:productId?": { action: "product/show" },
   "GET /basket/add/:offerId?": { action: "basket/add" },
   "GET /basket/add/:offerId?/:quantity?": { action: "basket/add" },
+  "GET /basket/show": { action: "basket/show" },
 
   "GET /faq": { view: "pages/faq" },
   "GET /legal/terms": { view: "pages/legal/terms" },
