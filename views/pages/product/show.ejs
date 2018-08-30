@@ -145,4 +145,20 @@
             <% } %>
         </div>
     </span>
+    <% if(typeof product.comments !== 'undefined') { %>
+        <div id="comments-list">
+        <h1>Retours utilisateurs : </h1>
+            <% for(let i = 0; i < product.comments.length; i++) { %>
+                <div class="product-comment">
+                <span class="comment-date">Envoyé le <%= product.comments[i].date %> par <span class="author-name">Anonyme</span></span>
+                <div class="rating">Note : 
+                <% for (let j = 0; j < 5; j++) { %>
+                    <i class="<%= (j < product.comments[i].rating - 0.25)? (j < product.comments[i].rating - 0.5)? 'fas fa-star' : 'fas fa-star-half-alt' : 'far fa-star'%>"></i>
+                <% } %>
+                </div>
+                    <p class="comment-content"><%= product.comments[i].content %></p>
+                </div>
+            <% } %>
+        </div>
+    <% } %>
 </div>

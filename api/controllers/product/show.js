@@ -32,7 +32,8 @@ module.exports = {
       where: { id: inputs.productId },
     }).populate('offers', {
       //where: { type: 'Neuf' },
-      sort: [{ sentByShopimax: 'DESC' }, { price: 'ASC' }]
+      sort: [{ sentByShopimax: 'DESC' }, { price: 'ASC' }],
+      limit: 3
     }).populate('images', {
       sort: 'order ASC'
     }).populate('comments')
@@ -43,8 +44,11 @@ module.exports = {
     var sum = 0;
     product.commentCount = product.comments.length;
     if (product.commentCount) {
-      for (let i = 0; i < product.commentCount; i++)
+      for (let i = 0; i < product.commentCount; i++) {
         sum += product.comments[i].rating;
+        let date = new Date(product.comments[i].createdAt * 1000);
+        product.comments[i].date = date.getDate() + '/' + date.getMonth();
+      }
       product.ratingAvg = Math.round((sum / product.commentCount) * 10) / 10;
     }
 
