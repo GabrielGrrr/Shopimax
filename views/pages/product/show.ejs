@@ -143,8 +143,12 @@
                 </div>
             </div>
             <% } %>
+            <div id="more-offers">
+                <a href="/offers/show/<%= product.id %>" ><button class="btn btn1">Voir plus d'offres pour ce produit.</button></a>
+            </div>
         </div>
     </span>
+    <span id="reviews"></span>
     <% if(typeof product.comments !== 'undefined') { %>
         <div id="comments-list">
         <h1>Retours utilisateurs : </h1>

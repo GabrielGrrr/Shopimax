@@ -1,0 +1,46 @@
+<div id ="show-offers">
+    <div id="list-offers">
+    <h2 id="list-offers-title">Toutes les offres pour le produit <a href="/show/<%= product.id %>" class="link1"><%= product.name %></a></h2>
+    <% for(let i = 1; i < product.offers.length; i++) { %>
+    <div class="offer">
+        <div class="sellerName"><%= product.offers[i].seller[0].companyName %></div>
+        <div class="offerType"><% switch (product.offers[i].type) {
+            case 'Neuf' : %>
+                    <span class="produit-neuf">Produit neuf</span>
+                    <% break;
+
+            case 'Reconditionné' : %>
+                    <span class="produit-recond">Produit reconditionné</span>
+                    <% break;
+
+            case 'Occasion' : %>
+                    <span class="produit-occasion">Produit d'occasion</span>
+                    <% break;
+
+            } %>
+        </div>
+        
+        <span class="offerPrice">EUR <%= product.offers[i].price %></span>
+        <% if (product.offers[i].sentByShopimax || product.offers[i].deliveryFee == 0) {%>
+            <span class="deliveryFee text-success">Livraison gratuite</span>
+        <% } else { %>
+        <span class="deliveryFee">+ EUR <%= product.offers[i].deliveryFee %> Livraison</span>
+        <% } %>
+        <% if (product.offers[i].remainingStock > 10) {%>
+            <div id="product-frame-stock" class="text-success"><%= product.offers[i].remainingStock %> produits restants.</div>
+        <% } else if(product.offers[0].remainingStock == 0) { %>
+            <div id="product-frame-stock" class="text-danger">Aucun produit en stock.<br/> Renouvellement estimé : 5-7 jours.</div>
+        <% } else { %>
+            <div id="product-frame-stock" class="text-warning">Plus que <%= product.offers[i].remainingStock %> produits restants !</div>
+        <% } %>
+        <div class="offer-addtoBasket">
+            <a href="/basket/add/<%= product.offers[i].id %>">
+                <button id="addToBasket" class="btn">
+                <i class="fas fa-shopping-basket"></i> Ajouter au panier
+                </button>
+            </a>
+        </div>
+    </div>
+    <% } %>
+    </div>
+</div>

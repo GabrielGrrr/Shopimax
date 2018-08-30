@@ -52,11 +52,12 @@ module.exports = {
       product.ratingAvg = Math.round((sum / product.commentCount) * 10) / 10;
     }
 
-    for (let i = 0; i < product.offers.length; i++) {
-      product.offers[i].seller = await Seller.find({
-        where: { id: product.offers[i].seller },
-      });
-    }
+    if (typeof product.offers !== undefined)
+      for (let i = 0; i < product.offers.length; i++) {
+        product.offers[i].seller = await Seller.find({
+          where: { id: product.offers[i].seller },
+        });
+      }
 
     return exits.success({
       product: product

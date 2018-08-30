@@ -16,8 +16,10 @@ module.exports.policies = {
   "entrance/*": true,
   "product/*": true,
   "basket/*": true,
+  "offers/show": true,
   "account/logout": true,
-  "fixtures": true,
+  "fixtures": true, // ATTENTION !
+
   "view-homepage-or-redirect": true,
   "deliver-contact-form-message": true
 };
