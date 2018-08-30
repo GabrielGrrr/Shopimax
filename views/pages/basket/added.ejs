@@ -1,1 +1,11 @@
-BRAVO GOOD FOR YOU GUYS
+<div id ="basket-added">
+    <div id ="added-message">
+        <h1 >
+            Félicitations ! Le produit <%= product.name %> x <%= quantity %> a bien été ajouté au panier.
+        </h1>
+        <p>
+            Vous pouvez désormais <a href="/transaction/checkout" alt"paiement">procéder au paiement</a>, <a href="/basket/show">modifier votre panier</a>,
+            ou <a href="/product/browse/1/<%= product.category %>">continuer à faire vos achats</a>.
+        </p>
+    </div>
+</div>

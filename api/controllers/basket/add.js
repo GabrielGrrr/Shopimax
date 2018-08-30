@@ -33,24 +33,25 @@ module.exports = {
     if (typeof this.req.session === 'undefined')
       return exits.redirect();
 
-    offer = await Offer.findOne({ where: { id: inputs.offerId } });
+    var offer = await Offer.findOne({ where: { id: inputs.offerId } });
+    var product = await Product.findOne({ where: { id: offer.product } });
+    var qtt = typeof quantity === 'undefined' ? 1 : quantity;
 
     if (typeof offer === 'undefined')
       return exits.redirect();
 
-    if (typeof this.req.session.basket !== 'undefined') {
+    if (typeof this.req.session.basket !== 'undefined')
       var basket = await JSON.parse(this.req.session.basket);
-    }
 
     if (typeof basket === 'undefined')
       var basket = new Array();
 
-    await basket.push([offer, typeof quantity === 'undefined' ? 1 : quantity]);
+    await basket.push([offer, qtt]);
 
     this.req.session.basketSize = basket.length;
     this.req.session.basket = await JSON.stringify(basket);
 
-    return exits.success();
+    return exits.success({ product: product, quantity: qtt });
   }
 
 
