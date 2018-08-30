@@ -9,11 +9,11 @@ parasails.registerPage('welcome', {
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
-  beforeMount: function() {
+  beforeMount: function () {
     // Attach any initial data from the server.
     _.extend(this, SAILS_LOCALS);
   },
-  mounted: async function() {
+  mounted: async function () {
     //…
   },
 
@@ -22,11 +22,11 @@ parasails.registerPage('welcome', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
 
-    clickOpenDashboardModalButton: async function() {
+    clickOpenDashboardModalButton: async function () {
       this.dashboardModalVisible = true;
     },
 
-    closeDashboardModal: async function() {
+    closeDashboardModal: async function () {
       this.dashboardModalVisible = false;
     },
 

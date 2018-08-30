@@ -20,9 +20,9 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
-    if (this.req.me) {
+    /*if (this.req.me) {
       throw { redirect: "/welcome" };
-    }
+    }*/
 
     return exits.success();
   }

@@ -42,7 +42,7 @@ module.exports = {
         limit: 1,
         sort: 'order ASC'
       });
-    var qtt = typeof quantity === 'undefined' ? 1 : quantity;
+    var qtt = typeof inputs.quantity === 'undefined' ? 1 : inputs.quantity;
 
     if (typeof offer === 'undefined')
       return exits.redirect();

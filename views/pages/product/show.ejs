@@ -1,14 +1,14 @@
-<div id="show">
+<div id="show-product">
     <span id="product-pictures">
         <span id="picture-select-bar">
             <% product.images.forEach(function(image) { %>
                 <div class="image-miniature">
-                    <img src="<%= image.url %>" alt="Miniature de la photo <%= image.order %> du produit">
+                    <img src="<%= image.url %>" alt="Miniature de la photo <%= image.order %> du produit" @click="updateImage('targetImage', $event)">
                 </div>
                 <% }); %>
         </span>
         <span id="product-picture-frame">
-            <img src=" <%= product.images[0].url %>" alt="Image du produit <%= product.name %>">
+            <img src=" <%= product.images[0].url %>" alt="Image du produit <%= product.name %>" id="targetImage">
         </span>
     </span>
     <span id="product-file">
@@ -93,11 +93,22 @@
         <span id="product-frame-sender-seller">
         </span>
         <div class="offer-addtoBasket">
-                    <a href="/basket/add/<%= product.offers[0].id %>">
+                    <a href="/basket/add/<%= product.offers[0].id %>" id ="<%= product.offers[0].id %>">
                         <button id="addToBasket" class="btn">
                         <i class="fas fa-shopping-basket"></i> Ajouter au panier
                         </button>
                     </a>
+                    <select class="quantity-setter" 
+                    :value="quantitySelected['<%= product.offers[0].id %>']" 
+                    @change="updateQuantity('<%= product.offers[0].id %>', $event)" 
+                    @load="initializeQuantity('<%= product.offers[0].id %>')" v-cloak>
+                    <option disabled value="1">Quantité</option>
+                        <option selected="selected">1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
             </div>
         </div>
         <div id="list-offers">
@@ -135,11 +146,22 @@
                     <div id="product-frame-stock" class="text-warning">Plus que <%= product.offers[i].remainingStock %> produits restants !</div>
                 <% } %>
                 <div class="offer-addtoBasket">
-                    <a href="/basket/add/<%= product.offers[i].id %>">
+                    <a href="/basket/add/<%= product.offers[i].id %>" id ="<%= product.offers[i].id %>">
                         <button id="addToBasket" class="btn">
                         <i class="fas fa-shopping-basket"></i> Ajouter au panier
                         </button>
                     </a>
+                    <select class="quantity-setter" offerId="<%= product.offers[i].id %>" 
+                    :value="quantitySelected['<%= product.offers[i].id %>']" 
+                    @change="updateQuantity('<%= product.offers[i].id %>', $event)"  
+                    @load="initializeQuantity('<%= product.offers[i].id %>')" v-cloak>
+                    <option disabled value="1">Quantité</option>
+                        <option selected="selected">1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
                 </div>
             </div>
             <% } %>

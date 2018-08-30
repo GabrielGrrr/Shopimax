@@ -27,7 +27,7 @@ parasails.registerComponent('modal', {
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
-  data: function (){
+  data: function () {
     return {
       // Spinlock used for preventing trying to close the bootstrap modal more than once.
       // (in practice it doesn't seem to hurt anything if it tries to close more than once,
@@ -58,7 +58,7 @@ parasails.registerComponent('modal', {
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
-  beforeMount: function() {
+  beforeMount: function () {
     // If this is mobile safari, make note of it.
     this.isMobileSafari = (typeof bowser !== 'undefined') && bowser.mobile && bowser.safari;
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -74,12 +74,12 @@ parasails.registerComponent('modal', {
     // FUTURE: maybe the bug will be fixed and we can remove this someday?
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    if(this.isMobileSafari) {
+    if (this.isMobileSafari) {
       // Get our original scroll position before opening the modal and save it for later.
       this.originalScrollPosition = $(window).scrollTop();
     }
   },
-  mounted: function(){
+  mounted: function () {
     // ^^ Note that this is not an `async function`.
     // This is just to be safe, since the timing here is a little tricky w/ the
     // animations and the fact that we're integrating with Bootstrap's modal.
@@ -97,11 +97,11 @@ parasails.registerComponent('modal', {
     // and when that happens, have Vue emit a custom "close" event.
     // (Note: This isn't just for convenience-- it's crucial that
     // the parent logic can use this event to update its scope.)
-    $(this.$el).on('hide.bs.modal', ()=>{
+    $(this.$el).on('hide.bs.modal', () => {
 
       // Undo any mobile safari workarounds we may have added.
       // (i.e. shed the wackiness)
-      if(this.isMobileSafari) {
+      if (this.isMobileSafari) {
         // Remove style overrides on our modal dialog.
         $(this.$el).css({
           'overflow-y': '',
@@ -128,10 +128,10 @@ parasails.registerComponent('modal', {
     // and when that happens, have Vue emit our own custom "opened" event.
     // This is so we know when the entry animation has completed, allows
     // us to do cool things like auto-focus the first input in a form modal.
-    $(this.$el).on('shown.bs.modal', ()=>{
+    $(this.$el).on('shown.bs.modal', () => {
 
       // If this is mobile safari, let's get wacky.
-      if(this.isMobileSafari) {
+      if (this.isMobileSafari) {
         // Scroll to the top of the page.
         window.scrollTo(0, 0);
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -166,7 +166,7 @@ parasails.registerComponent('modal', {
 
       // Focus our "focus-first" field, if relevant.
       // (but not on mobile, because it can get weird)
-      if(typeof bowser !== 'undefined' && !bowser.mobile && this.$find('[focus-first]').length > 0) {
+      if (typeof bowser !== 'undefined' && !bowser.mobile && this.$find('[focus-first]').length > 0) {
         this.$focus('[focus-first]');
       }
 
@@ -209,7 +209,7 @@ parasails.registerComponent('modal', {
       // >
       // > For more info, see:
       // > https://github.com/vuejs/vue-router/issues/1302#issuecomment-291207073
-      $(this.$el).on('hidden.bs.modal', ()=>{
+      $(this.$el).on('hidden.bs.modal', () => {
         $(this.$el).off('hide.bs.modal');
         $(this.$el).off('hidden.bs.modal');
         $(this.$el).off('shown.bs.modal');
