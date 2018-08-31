@@ -74,23 +74,23 @@
         <div class="form-group form-check">
           <input class="form-check-input" id="terms-agreement" type="checkbox" v-model="formData.agreed">
           <label for="terms-agreement" class="form-check-label" :class="[formErrors.agreed ? 'text-danger' : '']">J'ai lu &amp; accepte
-            <a target="_blank" href="/terms">les conditions d'utilisation</a>.</label>
+            <a target="_blank" href="/terms" class="link3">les conditions d'utilisation</a>.</label>
         </div>
         <p class="text-danger" v-if="cloudError==='emailAlreadyInUse'">
           <small>Il semble qu'il existe déjà un compte possédant votre e-mail. Si vous avez perdu votre mot de passe, vous pouvez
             le récupérer
-            <a href="password/forgot">ici</a>.</small>
+            <a href="password/forgot" class="link3">ici</a>.</small>
         </p>
         <p class="text-danger" v-else-if="cloudError">
           <small>Une erreur s'est produite, merci de réessayer ou de
-            <a href="/support">contacter le support</a> si l'erreur persiste.</small>
+            <a href="/support" class="link3">contacter le support</a> si l'erreur persiste.</small>
         </p>
         <div class="form-group">
           <ajax-button type="submit" :syncing="syncing" class="btn-dark btn-lg btn-block">Créer un compte Shopimax</ajax-button>
         </div>
       </ajax-form>
       <p class="text-center">Vous possédez déjà un compte Shopimax ?
-        <a href="/login">Connectez-vous</a>
+        <a href="/login" class="link3">Connectez-vous</a>
       </p>
     </div>
   </div>
@@ -104,7 +104,7 @@
       <p>(Vous pouvez quand même accéder au reste du site, mais des fonctionnalités seront désactivées tant que vous n'aurez
         pas finalisé votre inscription en vérifiant votre adresse e-mail.)</p>
       <p>
-        <a class="btn btn-outline-info" href="/">Retourner à l'accueil</a>
+        <a class="btn btn-outline-info" href="/" class="link3">Retourner à l'accueil</a>
       </p>
     </div>
   </div>

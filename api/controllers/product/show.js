@@ -37,7 +37,8 @@ module.exports = {
     }).populate('images', {
       sort: 'order ASC'
     }).populate('comments')
-      .populate('category');
+      .populate('category')
+      .populate('brand');
 
     // On boucle également sur ces entrées (comments et offers) pour les afficher dans la vue, mais pour maintenir la structure MVC, je garde tous les accès database
     // et les transformations d'éléments dans l'action / controller. Ca fait une complexité algorithmique inutilement deux fois plus grande cependant.

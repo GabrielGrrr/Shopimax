@@ -200,11 +200,11 @@ module.exports = {
 
       product = await Product.create({
         name: await faker.commerce.productAdjective() + " " + await faker.commerce.product(),
-        brand: await faker.company.companyName(),
         viewCount: await Math.round(Math.random() * 10000),
         saleCount: await Math.round(Math.random() * 1000),
         details: JSON.parse(details),
         images: pdctImages,
+        brand: sellers[await Math.floor((await Math.random()) * nbSellers)],
         category: category,
       }).fetch();
       // On détermine une gamme de prix dans laquelle se situeront les offres, pour davantage de cohérence

@@ -89,7 +89,8 @@ module.exports = {
       }).populate('images', {
         limit: 1,
         sort: 'order ASC'
-      }).populate('comments');
+      }).populate('comments')
+      .populate('brand');
 
     // FR : Puisque sails a désormais supprimé les méthodes d'instance (méthodes accessibles sur l'instance d'un modèle avec this en paramètre et non sa classe),
     // On parcours l'ensemble des données récupérées pour calculer la note moyenne et le compteur de notes

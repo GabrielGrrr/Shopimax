@@ -27,9 +27,6 @@ module.exports = {
       required: true,
       example: "Chimère irisée X3000"
     },
-    brand: {
-      type: "string"
-    },
     details: {
       type: "json"
     },
@@ -65,12 +62,15 @@ module.exports = {
       collection: "offer",
       via: "product"
     },
-    category: {
-      model: "ProductCategory",
-    },
     variations: {
       collection: "productvariation",
       via: "products"
+    },
+    category: {
+      model: "ProductCategory",
+    },
+    brand: {
+      model: "seller"
     }
   }
 };

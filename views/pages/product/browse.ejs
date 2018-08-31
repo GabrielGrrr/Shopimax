@@ -62,7 +62,7 @@
                             </div>
                         </a>
                         <div class="product-brand"> de
-                            <%= product.brand %>
+                            <a href="/seller/<%= product.brand.id %>"><%= product.brand.companyName %></a>
                         </div>
                         <div class="product-price"> EUR
                             <%= product.offers[0].price %>
