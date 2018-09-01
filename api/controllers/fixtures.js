@@ -208,7 +208,7 @@ module.exports = {
         category: category,
       }).fetch();
       // On détermine une gamme de prix dans laquelle se situeront les offres, pour davantage de cohérence
-      await priceRanges.set(product.id, await Math.round(await Math.random() < 0.5 ? 100 : (await Math.random() < 0.5 ? 10 : 2000)));
+      await priceRanges.set(product.id, await Math.random() < 0.5 ? 100 : (await Math.random() < 0.5 ? 10 : 1000));
 
       // On garde les ids de produits de côté pour pouvoir créer des offres et notations users qui y correspondent
       await products.push(product.id);
@@ -246,15 +246,19 @@ module.exports = {
     sails.log("Generating " + (nbAvgOffers * nbProducts) + " offers ...");
     for (i = 0; i < nbAvgComments * nbProducts; i++) {
       product = products[await Math.floor((await Math.random()) * nbProducts)];
-      if (await priceRanges.get(product) == 10)
+      if (await priceRanges.get(product) === 10)
         sbs = false;
       else
         sbs = await Math.random() < 0.2 ? true : false;
 
+      let price = 0;
+      price = await Math.round(((await priceRanges.get(product) / 2) + await Math.round(await Math.random() * (await priceRanges.get(product) / 2))) * 100) / 100;
+      //if (sbs) { price *= 1.1; price = await Math.round(price * 100) / 100; }
+
       offer = await Offer.create({
         type: await Math.random() < 0.5 ? "Neuf" : "Reconditionné",
-        price: await Math.round(await Math.random() * await priceRanges.get(product) * 100) / 100,
-        deliveryFee: (sbs || await priceRanges.get(product) == 2000) ? 0 : (await Math.round(Math.random() * 1500) / 100),
+        price: price,
+        deliveryFee: (sbs || await priceRanges.get(product) == 1000) ? 0 : (await Math.round(Math.random() * 1500) / 100),
         remainingStock: await Math.floor(await Math.random() * 100),
         sentByShopimax: sbs,
         seller: sellers[await Math.floor((await Math.random()) * nbSellers)],

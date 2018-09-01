@@ -31,9 +31,9 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     if (typeof this.req.session === 'undefined')
-      return exits.redirect();
+      throw { redirect: "/" }
     if (typeof inputs.offerId === 'undefined')
-      return exits.redirect();
+      throw { redirect: "/" }
 
 
     var offer = await Offer.findOne({ where: { id: inputs.offerId } });
@@ -45,7 +45,7 @@ module.exports = {
     var qtt = typeof inputs.quantity === 'undefined' ? 1 : inputs.quantity;
 
     if (typeof offer === 'undefined')
-      return exits.redirect();
+      throw { redirect: "/" }
 
     if (typeof this.req.session.basket !== 'undefined')
       var basket = await JSON.parse(this.req.session.basket);

@@ -1,4 +1,32 @@
 <div id="homepage">
-  
+  <div id="message">
+    <h1>Shopimax, site factice de vente de produits ressemblant suspicieusement à des chats</h1>
+    <h2>Statut : suspendu. (Veni, vidi, vici.)</h2>
+    <h3>(J'ai fait le tour du framework Sails et j'ai désormais envie de passer à autre chose) ;-)</h3>
+    <p>Travailler sous Sails n'était pas toujours désagréable, mais à la longue je me suis trouvé, pour cette application, à
+      passer
+      <b>plus de temps à lutter avec Waterline</b> (l'ORM de sails) pour lui faire faire ce que je voulais : son querybuilder
+      ne gère pas nativement les
+      <b>contraintes sur les champs ajoutés par jointure</b>, il est impossible de mettre en place de
+      <i>nested records</i> (
+      <b>jointure sur jointure</b> : récupérer les propriétés d'entités associées à plus d'1 pas de distance est impossible),
+      impossible non plus de compter ou effectuer des traitements sur les éléments associés, et
+      impossible d'utiliser des
+      <b>
+        <i>computed fields</i>
+      </b>, ou méthodes d'instance, qui ont été supprimées, pour implémenter des champs calculé dont la valeur dépend d'opérations
+      effectuées sur la BDD, qui pourraient idéalement être mis en cache et que l'on mettrait ainsi à jour dés que les champs
+      dont ils dépendent sont CUD.
+    </p>
+    <p>
+      Tout cela, accompagné du fait que le framework ne diminue pas si significativement que ça la quantité de code générée du fait que, par exemple,
+      la validation soit requise en plusieurs endroits (au niveau de l'entité, du controller et de l'ajax / formulaire),
+      de même que le typage et la spécification du modèle (pas d'assistance à la génération de formulaire ou autre), m'a convaincu de 
+      conclure qu'utiliser le framework pour un site au modèle aussi dense que Shopimax n'était pas pertinent.
+    </p>
+    <p> Vous pouvez néanmoins utiliser l'appli telle qu'elle en gardant tout ça en tête, et
+      <a href="/fixtures" class="link3">générer des fixtures</a>,
+      <a href="/browse" class="link3">parcourir des produits</a> et exploiter les quelques fonctionnalités qui ont été implémentées. ;)</p>
+  </div>
 </div>
 <%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

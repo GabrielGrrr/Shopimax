@@ -34,11 +34,18 @@
             <div id="product-frame-stock" class="text-warning">Plus que <%= product.offers[i].remainingStock %> produits restants !</div>
         <% } %>
         <div class="offer-addtoBasket">
-            <a href="/basket/add/<%= product.offers[i].id %>">
+            <a href="/basket/add/<%= product.offers[i].id %>" id="<%= product.offers[i].id %>">
                 <button id="addToBasket" class="btn">
                 <i class="fas fa-shopping-basket"></i> Ajouter au panier
-                </button>
+                </button> 
             </a>
+            <quantity-setter offerid="<%= product.offers[i].id %>">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+            </quantity-setter>
         </div>
     </div>
     <% } %>

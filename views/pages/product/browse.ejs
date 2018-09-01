@@ -33,7 +33,16 @@
                 </ul>
             </div>
             <div id="menu-options">
-            <!-- <h2>Critères additionnels : </h2>-->
+            <!-- <h2>Critères additionnels : </h2>
+                <div id="options-panel">
+                    <div id="price-range"> Prix entre
+                        <input class="price-range" v-model="minPrice" @change="updatePriceMin($event)"  v-cloak>
+                        </input>
+                         et 
+                        <input class="price-range" v-model="maxPrice" @change="updatePriceMax($event)"  v-cloak>
+                        </input>
+                    </div>
+                </div> -->
             </div>
         </section>
 

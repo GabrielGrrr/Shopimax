@@ -47,6 +47,8 @@ module.exports = {
     var index = (typeof inputs.index == 'undefined') ? 1 : inputs.index;
     var root = await ProductCategory.findOne({ where: { rank: 0 } })
       .populate('children').populate('parent');
+    var minPrice = typeof this.req.param('minPrice') !== 'undefined' ? this.req.param('minPrice') : 1;
+    var maxPrice = typeof this.req.param('maxPrice') !== 'undefined' ? this.req.param('maxPrice') : 9999;
 
     // On pourrait également récupérer l'ensemble de l'arbre des catégories, plutôt que de faire un find en boucle, il n'est pas bien lourd
     if (typeof inputs.categoryId !== 'undefined' && inputs.categoryId !== root.id) {
@@ -84,6 +86,7 @@ module.exports = {
       .skip((index - 1) * resultsPerPage)
       .sort('saleCount DESC')
       .populate('offers', {
+        where: { price: { '<': maxPrice, '>': minPrice } },
         limit: 1,
         sort: [{ sentByShopimax: 'DESC' }, { price: 'ASC' }]
       }).populate('images', {

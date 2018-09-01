@@ -27,6 +27,7 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
+    if (typeof inputs.productId === "undefined") throw { redirect: "/" }
 
     product = await Product.findOne({
       where: { id: inputs.productId },

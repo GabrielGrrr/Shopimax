@@ -98,17 +98,13 @@
                         <i class="fas fa-shopping-basket"></i> Ajouter au panier
                         </button>
                     </a>
-                    <select class="quantity-setter" 
-                    :value="quantitySelected['<%= product.offers[0].id %>']" 
-                    @change="updateQuantity('<%= product.offers[0].id %>', $event)" 
-                    @load="initializeQuantity('<%= product.offers[0].id %>')" v-cloak>
-                    <option disabled value="1">Quantité</option>
-                        <option selected="selected">1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                    </select>
+                    <quantity-setter offerid="<%= product.offers[0].id %>">
+                    <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                    </quantity-setter>
             </div>
         </div>
         <div id="list-offers">
@@ -151,17 +147,13 @@
                         <i class="fas fa-shopping-basket"></i> Ajouter au panier
                         </button>
                     </a>
-                    <select class="quantity-setter" offerId="<%= product.offers[i].id %>" 
-                    :value="quantitySelected['<%= product.offers[i].id %>']" 
-                    @change="updateQuantity('<%= product.offers[i].id %>', $event)"  
-                    @load="initializeQuantity('<%= product.offers[i].id %>')" v-cloak>
-                    <option disabled value="1">Quantité</option>
-                        <option selected="selected">1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                    </select>
+                    <quantity-setter offerid="<%= product.offers[i].id %>">
+                    <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                    </quantity-setter>
                 </div>
             </div>
             <% } %>
@@ -188,3 +180,4 @@
         </div>
     <% } %>
 </div>
+<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

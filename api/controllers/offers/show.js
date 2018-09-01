@@ -34,7 +34,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     if (typeof inputs.productId === 'undefined')
-      return exits.redirect();
+      throw { redirect: "/" }
 
     var product = await Product.findOne({ where: { id: inputs.productId } })
       .populate('offers', {
@@ -42,7 +42,7 @@ module.exports = {
       });
 
     if (typeof product === 'undefined')
-      return exits.redirect();
+      throw { redirect: "/" }
 
     if (typeof product.offers !== undefined)
       for (let i = 0; i < product.offers.length; i++) {
@@ -50,7 +50,7 @@ module.exports = {
           where: { id: product.offers[i].seller },
         });
       }
-    else return exits.redirect();
+    else throw { redirect: "/" }
 
     return exits.success({ product: product });
 
