@@ -1,29 +1,42 @@
-# shopimax
+Shopimax
 
-a [Sails v1](https://sailsjs.com) application
+EN : A fake e-commerce website, written with Node JS and the Sails framework
 
+FR : Un site d'e-commerce factice, écrit avec Node et le framework Sails en javascript
 
-### Links
+Sails version : 1.0.2
+Features :
 
-+ [Get started](https://sailsjs.com/get-started)
-+ [Sails framework documentation](https://sailsjs.com/documentation)
-+ [Version notes / upgrading](https://sailsjs.com/documentation/upgrading)
-+ [Deployment tips](https://sailsjs.com/documentation/concepts/deployment)
-+ [Community support options](https://sailsjs.com/support)
-+ [Professional / enterprise options](https://sailsjs.com/enterprise)
+EN : Listing, viewing and adding products to basket. Nested categories. Account management and CRUD access on user account. User sessions. Session-stored basket. Different sellers per products.
 
+FR : Affichage des produits par liste et affichage particulier, recherche par catégories emboîtées, gestion de compte classique et gestion de session utilisateur. Panier d'achat stocké en session. Affichage de différents vendeurs par produits.
+INSTALLATION EN FRANÇAIS
 
-### Version info
+FR : Procédure d'installation :
 
-This app was originally generated on Mon Aug 20 2018 08:56:53 GMT+0200 (GMT+02:00) using Sails v1.0.2.
+    Installez NodeJS et NPM, si ce n'est déjà fait
 
-<!-- Internally, Sails used [`sails-generate@1.15.28`](https://github.com/balderdashy/sails-generate/tree/v1.15.28/lib/core-generators/new). -->
+    Installez Sails
 
+    Maintenant, copiez Shopimax en faisant :
 
-This project's boilerplate is based on an expanded seed app provided by the [Sails core team](https://sailsjs.com/about) to make it easier for you to build on top of ready-made features like authentication, enrollment, email verification, and billing.  For more information, [drop us a line](https://sailsjs.com/support).
+    git clone https://github.com/GabrielPoint/Shopimax.git
 
+    Configurer la base de donnée : Le fichier de configuration de la BDD se situe dans config/datastore.js Sous "default", ajoutez :
 
-<!--
-Note:  Generators are usually run using the globally-installed `sails` CLI (command-line interface).  This CLI version is _environment-specific_ rather than app-specific, thus over time, as a project's dependencies are upgraded or the project is worked on by different developers on different computers using different versions of Node.js, the Sails dependency in its package.json file may differ from the globally-installed Sails CLI release it was originally generated with.  (Be sure to always check out the relevant [upgrading guides](https://sailsjs.com/upgrading) before upgrading the version of Sails used by your app.  If you're stuck, [get help here](https://sailsjs.com/support).)
--->
+adapter: "sails-mongo",
+url: "mongodb://localhost:27017/shopimax"
 
+Pour MongoDB, OU
+adapter: 'sails-mysql',
+url: 'mysql://user:password@host:port/database'
+
+Pour MySQL
+
+    Pour lancer l'application, faites un
+
+    sails lift
+
+    Pour générer des fixtures, allez à l'URL: http://localhost:1337/fixtures
+
+    L'application est visitable sur http://localhost:1337
