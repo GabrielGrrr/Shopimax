@@ -20,7 +20,7 @@ FR : Procédure d'installation :
 
     Maintenant, copiez Shopimax en faisant :
 
-    git clone https://github.com/GabrielPoint/Shopimax.git
+    git clone https://github.com/GabrielGrrr/Shopimax.git
 
     Configurer la base de donnée : Le fichier de configuration de la BDD se situe dans config/datastore.js Sous "default", ajoutez :
 
