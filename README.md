@@ -22,16 +22,12 @@ FR : Procédure d'installation :
 
     git clone https://github.com/GabrielGrrr/Shopimax.git
 
-    Configurer la base de donnée : Le fichier de configuration de la BDD se situe dans config/datastore.js Sous "default", ajoutez :
-
-adapter: "sails-mongo",
-url: "mongodb://localhost:27017/shopimax"
-
-Pour MongoDB, OU
-adapter: 'sails-mysql',
-url: 'mysql://user:password@host:port/database'
-
-Pour MySQL
+    Configurer la base de donnée : Le fichier de configuration de la BDD se situe dans config/datastore.js Sous "default", ajoutez : adapter: "sails-mongo", 
+    url: "mongodb://localhost:27017/shopimax" 
+    Pour MongoDB, 
+    OU adapter: 'sails-mysql', 
+    url: 'mysql://user:password@host:port/database'
+    Pour MySQL.
 
     Pour lancer l'application, faites un
 
